@@ -33,12 +33,6 @@ public class MyCallback extends HBCICallbackConsole {
 	public MyCallback(NotifierDTO not) {
 		super();
 		
-		boolean bp = this.pin.equalsIgnoreCase( not.getKonto().getPassword());
-		boolean bp1 = this.customerId.equalsIgnoreCase( not.getKonto().getAccount());
-		boolean bp2 = this.kontoNr.equalsIgnoreCase( String.valueOf(not.getKonto().getKtonr()+kontoNrFill) );
-		boolean bp3 = this.kontoID.equalsIgnoreCase( String.valueOf(not.getKonto().getId()) );
-		
-		
 		this.pin = not.getKonto().getPassword();
 		this.customerId = not.getKonto().getAccount();
 		this.kontoNr = String.valueOf(not.getKonto().getKtonr())+kontoNrFill;
