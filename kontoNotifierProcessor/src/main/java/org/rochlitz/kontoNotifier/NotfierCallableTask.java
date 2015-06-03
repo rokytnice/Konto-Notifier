@@ -2,6 +2,7 @@ package org.rochlitz.kontoNotifier;
 
 import java.util.concurrent.Callable;
 
+import org.kapott.hbci.GV_Result.GVRKUms;
 import org.rochlitz.hbci.tests.web.MyCallback;
 import org.rochlitz.hbci.tests.web.TestKontoAuszugThreaded;
 import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
@@ -23,7 +24,7 @@ public class NotfierCallableTask implements Callable<Boolean> {
 
 			MyCallback mc = new MyCallback(not);
 			TestKontoAuszugThreaded t = new TestKontoAuszugThreaded(mc);
-			t.getAuszug();
+			GVRKUms result = t.getAuszug();
 			
 			System.out.println("process task for Not id " + not.getId()
 					+ "   filter - " + not.getFilter().getSearch());
