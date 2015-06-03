@@ -12,16 +12,16 @@ import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
 
 public class MyCallback extends HBCICallbackConsole {
 	// User data
-	private String pin = "741896";
-	private String customerId = "30746930";
-	private String passphrase = "1"; // passport passwort
+	private String pin ; // 
+	private String customerId ; //= "30746930";
+	private String passphrase = "1"; // passport passwort   //TODO account passwd
 
 	// comdirect data
 	private String blz = "20041133";
 	private String hbciHost = "fints.comdirect.de/fints";
 	private String countryOfBank = "DE";
 	private String TANVerfahren = "901"; // mobile TAN = 901
-	private String kontoNr = "490058500";  
+	private String kontoNr; // = "490058500";  
 	private String kontoNrFill = "00";
 	private String kontoSubNr = "00";
 	
