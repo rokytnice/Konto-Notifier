@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>HTML5 QuickStart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Disable phone number detection on iOS.  -->
+<meta name="format-detection" content="telephone=no" />
+
+<!-- Set the tab, home page, shortcut icons -->
+<!-- <link rel="Shortcut Icon" href="img/"> -->
+<!-- <link rel="apple-touch-icon" href="img/"/> -->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>-->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/screen.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/screen.min.css"/>-->
+
+<!-- Set viewport scaling and zoom features -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery-2.0.3.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery-2.0.3.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/lodash-2.4.1.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/lodash-2.4.1.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/app.js"></script>
+<!-- For minification, uncomment out this file -->
+<!-- <script type="text/javascript" src="js/app.min.js"></script> -->
+
+<script type="text/javascript">
+        $( document ).ready( function() {
+
+
+
+            $(function() {
+                // Enhance the footer since it is present outside the page definition and hence not enhanced automatically.
+                $( "[data-role='footer']" ).toolbar();
+                $( "[data-role='navbar']" ).navbar();
+            });
+            // Update the contents of the toolbars
+            $( document ).on( "pageshow", "[data-role='page']", function() {
+                var current = $( this ).jqmData( "title" );
+                // Remove active class from nav buttons
+                $( "[data-role='navbar'] a.ui-btn-active" ).removeClass( "ui-btn-active" );
+                // Add active class to current nav button
+                $( "[data-role='navbar'] a" ).each(function() {
+                    if ( $( this ).text() === current ) {
+                        $( this ).addClass( "ui-btn-active" );
+                    }
+                });
+            });
+
+            // On browsing to the Members jQuery Mobile page, update it to show all members
+            $("#nots-art").on("pagebeforeshow", function() {
+                // Fetches the initial member data and populates the table using lodash templates
+                getNotifiers();
+            });
+        	
+        	
+            getKontos();
+            
+           
+           
+            //Register an event listener on the submit action
+            $('#reg').submit(function(event) {
+                event.preventDefault();
+
+                var data = $(this).serializeObject();
+
+                saveNotifier(data);
+            });
+
+            //Register the cancel listener
+            $('#cancel').click(function(event) {
+                //clear input fields
+                $('#reg')[0].reset();
+
+                //clear existing msgs
+                $('span.invalid').remove();
+                $('span.success').remove();
+            });
+
+            $("#refreshButton").click(function(event) {
+                getNotifiers();
+            });
+
+            //Clear member registration and error messages on page change
+            $("#not-art").on("pagebeforeshow", function(event) {
+                $("#formMsgs").empty();
+                $('span.invalid').remove();
+            });
+        });
+
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    </script>
+</head>
+<body>
+	<div id="container">
+		<section>
+			<article id="not-art" data-role="page"
+				data-title="Kontodienst hinzufügen">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Kontoinformationsdienst hinzufügen</h3>
+				</div>
+				<!-- /Header -->
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<form name="reg" id="reg" data-ajax="false">
+
+							<h2></h2>
+							<br> <label>Konto</label> <select id="kontoSelection"
+								name="kontoSelection" value="" type="text">
+								<option id="null">Konto auswählen ...</option>
+							</select> <label>Suche</label> <input name="search" value="" type="text">
+							<label>Minimum Euro</label> <input name="minValue" value=""
+								type="text"> <label>Maximum Euro</label> <input
+								name="maxValue" value="" type="text"> <br> <input
+								type="submit" value="Speichern"></input>
+							<div id="formMsgs"></div>
+						</form>
+
+					</div>
+				</div>
+			</article>
+
+
+
+			<article id="nots-art" data-role="page" data-title="List  Notifiers">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Alle Kontoinformationsdienste</h3>
+				</div>
+				<!-- /Header -->
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<button id="refreshButton" data-role="button" data-inline="true"
+							data-icon="refresh">Kontodienstliste aktualisieren</button>
+						<table data-role="table" id="nots-table" data-mode="reflow"
+							class="app-responsive table-stroke">
+							<thead>
+								<tr>
+									<th data-priority="1">Kontonr.</th>
+									<th data-priority="2">Search</th>
+									<th data-priority="3">Min €</th>
+									<th data-priority="3">Max €</th>
+								</tr>
+							</thead>
+							<tbody id="nots">
+								<!-- see js template  nots-tmpl -->
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</article>
+
+			<!-- Footer -->
+			<div data-role="footer" data-tap-toggle="false" data-position="fixed"
+				data-theme="a">
+				<div data-role="navbar">
+					<ul>
+						<!--                         <li><a href="#intro-art" data-icon="home" class="ui-btn-active">Hauptmenü</a></li> -->
+						<li><a href="#not-art" data-icon="plus">Neuer Kontodienst</a></li>
+						<li><a href="#nots-art" data-icon="grid">Alle
+								Kontodienste</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /Footer -->
+
+		</section>
+
+	</div>
+
+	<script type="text/template" id="nots-tmpl">
+        <% _.each(data, function(not) { %>
+        <tr>
+            <td><%=not.konto.ktonr%></td>
+			<td><%=not.filter.serach%></a></td>            
+			<td><%=not.filter.minValue%></a></td>
+ 			<td><%=not.filter.maxValue%></a></td>
+			 
+        </tr>
+        <% }); %>
+    </script>
+</body>
+</html>
+

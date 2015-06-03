@@ -1,0 +1,5 @@
+#1420372991209
+#Sun Jan 04 13:03:11 CET 2015
+basic.dialogid=A7SpQfnBtEoBAABGH1JpUAIKhAQA
+basic.segnum=3
+basic.msgnum=2

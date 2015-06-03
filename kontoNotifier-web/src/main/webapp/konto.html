@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>HTML5 QuickStart</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Disable phone number detection on iOS.  -->
+<meta name="format-detection" content="telephone=no" />
+
+<!-- Set the tab, home page, shortcut icons -->
+<!-- <link rel="Shortcut Icon" href="img/"> -->
+<!-- <link rel="apple-touch-icon" href="img/"/> -->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>-->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/screen.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/screen.min.css"/>-->
+
+<!-- Set viewport scaling and zoom features -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery-2.0.3.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery-2.0.3.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/lodash-2.4.1.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/lodash-2.4.1.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/app.js"></script>
+<!-- For minification, uncomment out this file -->
+<!-- <script type="text/javascript" src="js/app.min.js"></script> -->
+
+<script type="text/javascript">
+        $( document ).ready( function() {
+            //setup the app after all scripts have loaded
+
+            $(function() {
+                // Enhance the footer since it is present outside the page definition and hence not enhanced automatically.
+            });
+           
+            //Register an event listener on the submit action
+            $('#reg').submit(function(event) {
+                event.preventDefault();
+
+                var memberData = $(this).serializeObject();
+
+                saveKonto(memberData);
+            });
+
+            //Register the cancel listener
+            $('#cancel').click(function(event) {
+                //clear input fields
+                $('#reg')[0].reset();
+
+                //clear existing msgs
+                $('span.invalid').remove();
+                $('span.success').remove();
+            });
+
+            $("#refreshButton").click(function(event) {
+                updateMemberTable();
+            });
+
+            //Clear member registration and error messages on page change
+            $("#register-art").on("pagebeforeshow", function(event) {
+                $("#formMsgs").empty();
+                $('span.invalid').remove();
+            });
+        });
+
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    </script>
+</head>
+
+
+<body>
+	<div id="container">
+		<section>
+
+			<article id="register-art" data-role="page"
+				data-title="Notifier hinzufügen">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Konto Information Service</h3>
+				</div>
+				<!-- /Header -->
+				<div class="ui-content" role="main">
+					<div class="wrap">
+
+						<form name="reg" id="reg" data-ajax="false">
+
+							<h2>Zugangsdaten Online Banking:</h2>
+							<br> 
+							<label>Kontonummer</label> <input name="ktonr" value="" 
+								type="text"> <label>Bankleitzahl</label> <input
+								name="blz" value="" type="text"> <label>Zugangsnummer</label>
+							<input name="account" value="" type="text"> <label>Passwort</label>
+							<input name="password" value="" type="password"> <br>
+							<input type="submit" value="Speichern"></input> <br>
+							<div id="formMsgs"></div>
+						</form>
+
+					</div>
+				</div>
+			</article>
+
+
+            <!-- Footer -->
+            <div data-role="footer" data-tap-toggle="false" data-position="fixed" data-theme="a">
+                <div data-role="navbar">
+                    <ul>
+                        <li><a href="#intro-art" data-icon="home" class="ui-btn-active">Home</a></li>
+                        <li><a href="#register-art" data-icon="plus">Add a Member</a></li>
+                        <li><a href="#member-art" data-icon="grid">List Members</a></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /Footer -->
+
+		</section>
+	</div>
+
+</body>
+</html>
+
