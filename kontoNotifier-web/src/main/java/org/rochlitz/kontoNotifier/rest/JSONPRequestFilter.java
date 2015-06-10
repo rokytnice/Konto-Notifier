@@ -79,7 +79,6 @@ public class JSONPRequestFilter implements Filter {
         String pi = httpRequest.getPathInfo();
         String locadre = httpRequest.getLocalAddr();
         String l = httpRequest.getLocalName();
-        
         String url = cpath + "/" + pi;
         
 //        log.info("********* http request    "  + cpath  +  method  + pi);

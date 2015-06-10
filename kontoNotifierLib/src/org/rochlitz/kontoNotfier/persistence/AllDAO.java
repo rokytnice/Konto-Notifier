@@ -43,7 +43,8 @@ public class AllDAO{
 
 
     public void persist(IDTO dto) throws Exception {
-        em.persist(dto);
+        em.merge(dto);
+        em.flush();
     }
     
     

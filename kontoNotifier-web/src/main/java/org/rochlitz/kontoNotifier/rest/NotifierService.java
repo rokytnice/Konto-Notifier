@@ -38,8 +38,6 @@ public class NotifierService {
 		
 		try{
 			
-			kDAO.persist(filter);
-			
 			UserDTO user = (UserDTO) kDAO.getAll(new UserDTO()).iterator().next() ;//TODO FAKED:  get user from sessiob
 			KontoDTO kto = (KontoDTO) kDAO.find(filter.getKontoSelection(),new KontoDTO());
 			
@@ -48,6 +46,8 @@ public class NotifierService {
 			not.setFilter(filter);
 			not.setUser(user);
 
+			
+			kDAO.persist(filter);
 			kDAO.persist(not);
 			   // Create an "ok" response
 	        builder = Response.ok().entity(filter);

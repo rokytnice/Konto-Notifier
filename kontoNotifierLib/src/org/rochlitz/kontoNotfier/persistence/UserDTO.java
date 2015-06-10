@@ -25,6 +25,15 @@ public class UserDTO implements IDTO {
 	private String username;
 	
 	
+	@Column(name = "PASSWORD")
+	private String password;//TODO check varchar 256???
+	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getEmail() {
 		return email;
 	}

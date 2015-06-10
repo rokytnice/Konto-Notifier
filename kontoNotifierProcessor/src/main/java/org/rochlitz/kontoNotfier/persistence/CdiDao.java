@@ -31,6 +31,7 @@ public class CdiDao{
 	//TODO test hbci data /  connection 
     public void persist(IDTO dto) throws Exception {
         em.persist(dto);
+        em.flush();
     }
     
     

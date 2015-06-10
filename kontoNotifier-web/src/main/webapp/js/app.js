@@ -61,8 +61,6 @@ function getNotifiers() {
         url: "rest/notifier",
         cache: false,
         success: function(data) {
-        	
-        	
            
               $( "#nots" ).append(buildNotsRows(data));
               $( "#nots-table" ).table( "refresh" );
@@ -177,4 +175,51 @@ function saveNotifier(data) {
         }
     });
 
+}
+
+
+
+
+function doRegistration(data) {
+    //clear existing  msgs
+    $('span.invalid').remove();
+    $('span.success').remove();
+
+    // Display the loader widget
+    $.mobile.loading("show");
+
+    $.ajax({
+        url: 'rest/registration',
+        contentType: "application/json",
+        dataType: "json",
+        type: "POST",
+        data: JSON.stringify(data),
+        success: function(data) {
+            //console.log("Member registered");
+
+            //clear input fields
+            $('#reg')[0].reset();
+
+            $('#formMsgs').append($('<span class="success"> Registrierung erfolgreich.</span>'));
+
+        },
+        error: function(error) {
+            if ((error.status == 409) || (error.status == 400)) {
+                //console.log("Validation error registering user!");
+
+                var errorMsg = $.parseJSON(error.responseText);
+
+                $.each(errorMsg, function(index, val) {
+                    $('<span class="invalid">' + val + '</span>').insertAfter($('#' + index));
+                });
+            } else {
+                //console.log("error - unknown server issue");
+                $('#formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+            }
+        },
+        complete: function() {
+            // Hide the loader widget
+            $.mobile.loading("hide");
+        }
+    });
 }

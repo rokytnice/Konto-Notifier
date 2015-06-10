@@ -2,6 +2,7 @@ package org.rochlitz.kontoNotfier.persistence;
 
 import java.sql.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,15 +22,15 @@ public class NotifierDTO implements IDTO {
 	@Column(name = "NOTIFIER_ID")
 	private long Id;// PK
 
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name = "USER_ID")
 	private UserDTO user;
 	
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name="KONTO_ID")
 	private KontoDTO konto;
 	
-	@OneToOne
+	@OneToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name="FILTER_ID")
 	private FilterDTO filter;
 	
