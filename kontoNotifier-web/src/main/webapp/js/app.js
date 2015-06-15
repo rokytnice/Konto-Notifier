@@ -214,7 +214,7 @@ function doRegistration(data) {
                 });
             } else {
                 //console.log("error - unknown server issue");
-                $('#formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+                $('#formMsgs').append($('<span class="invalid">Unknown server error.</span>'));
             }
         },
         complete: function() {
