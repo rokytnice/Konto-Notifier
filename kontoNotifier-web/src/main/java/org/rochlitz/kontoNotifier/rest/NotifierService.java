@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
@@ -11,6 +13,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -32,13 +35,19 @@ public class NotifierService {
 	@POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-	public Response addFilterANDNotfier(FilterDTO filter) {
+	public Response addFilterANDNotfier(FilterDTO filter,@Context HttpServletRequest request ) {
 
 		Response.ResponseBuilder builder = null;
 		
 		try{
 			
-			UserDTO user = (UserDTO) kDAO.getAll(new UserDTO()).iterator().next() ;//TODO FAKED:  get user from sessiob
+			
+			HttpSession sess = request.getSession();
+			UserDTO user = (UserDTO)sess.getAttribute("user");
+			if(user == null){
+				throw new Exception("no  user in session found ");
+			}
+		
 			KontoDTO kto = (KontoDTO) kDAO.find(filter.getKontoSelection(),new KontoDTO());
 			
 			NotifierDTO not = new NotifierDTO();

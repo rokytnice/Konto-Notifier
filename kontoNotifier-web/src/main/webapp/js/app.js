@@ -1,4 +1,4 @@
- 
+require("https://apis.google.com/js/platform.js");
 
 /* Builds the updated table for the member list */
 function buildMemberRows(members) {
@@ -223,3 +223,87 @@ function doRegistration(data) {
         }
     });
 }
+
+ 
+
+
+function sendToken(data) {
+
+    $.ajax({
+        url: 'rest/setToken',
+        contentType: "application/json",
+        dataType: "json",
+        type: "POST",
+        data: JSON.stringify(data),
+        success: function(data) {
+        	console.log(" id_token sent");
+        },
+        error: function(error) {
+            if ((error.status == 409) || (error.status == 400)) {
+                //console.log("Validation error registering user!");
+
+                var errorMsg = $.parseJSON(error.responseText);
+                console.log("error - "+errorMsg);
+                $.each(errorMsg, function(index, val) {
+                    $('<span class="invalid">' + val + '</span>').insertAfter($('#' + index));
+                });
+            } else {
+                console.log("error - unknown server issue" + error);
+            }
+        },
+        complete: function() {
+            // Hide the loader widget
+        }
+    });
+}
+
+function signOut() {
+	 var profile = googleUser.getBasicProfile();
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+
+function require(script) {
+    $.ajax({
+        url: script,
+        dataType: "script",
+        async: false,           // <-- This is the key
+        success: function () {
+            // all good...
+        },
+        error: function () {
+            throw new Error("Could not load script " + script);
+        }
+    });
+}
+
+function switchToApp()
+{		
+		window.location = '/notifier/notifier.html';   
+		console.log("window.location  "+window.location );
+}
+
+function onSignIn(googleUser) {
+  // Useful data for your client-side scripts:
+  var profile = googleUser.getBasicProfile();
+  console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+  console.log("Name: " + profile.getName());
+  console.log("Image URL: " + profile.getImageUrl());
+  console.log("Email: " + profile.getEmail());
+
+  // The ID token you need to pass to your backend:
+  var id_token = googleUser.getAuthResponse().id_token;
+  console.log("ID Token: " + id_token);
+
+
+  var data = { "id_token":""+id_token+"" };
+         
+  sendToken( data );
+
+  switchToApp();
+
+  
+};
+

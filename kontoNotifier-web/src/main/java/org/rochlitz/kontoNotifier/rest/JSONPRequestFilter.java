@@ -28,7 +28,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.WriteListener;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
@@ -74,6 +76,8 @@ public class JSONPRequestFilter implements Filter {
 
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final HttpServletResponse httpResponse = (HttpServletResponse) response;
+        Cookie[] cookies = httpRequest.getCookies();
+        String sessionId = httpRequest.getRequestedSessionId();
         String cpath = httpRequest.getContextPath();
         String method = httpRequest.getMethod();
         String pi = httpRequest.getPathInfo();
@@ -108,6 +112,18 @@ public class JSONPRequestFilter implements Filter {
                         public void write(int b) throws IOException {
                             byteStream.write(b);
                         }
+
+						@Override
+						public boolean isReady() {
+							// TODO Auto-generated method stub
+							return false;
+						}
+
+						@Override
+						public void setWriteListener(WriteListener arg0) {
+							// TODO Auto-generated method stub
+							
+						}
 
 						 
                     };

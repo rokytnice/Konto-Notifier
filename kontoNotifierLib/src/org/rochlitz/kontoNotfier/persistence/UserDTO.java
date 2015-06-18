@@ -28,6 +28,12 @@ public class UserDTO implements IDTO {
 	@Column(name = "PASSWORD")
 	private String password;//TODO check varchar 256???
 	
+	public UserDTO(String email2) {
+		email=email2;
+	}
+	public UserDTO() {
+		// TODO Auto-generated constructor stub
+	}
 	public String getPassword() {
 		return password;
 	}

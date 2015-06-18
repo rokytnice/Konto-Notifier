@@ -26,9 +26,8 @@ public class RestApplication extends Application {
 //		singletons.add( new KontoRestService() );
 		classes.add(KontoService.class);
 		classes.add(NotifierService.class);
-		classes.add(UserRegistrationService.class);
+//		classes.add(UserRegistrationService.class);
 		classes.add(LoginService.class);
-		
 	}
 
 	@Override

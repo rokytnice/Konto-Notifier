@@ -3,9 +3,7 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-        <dependent-module archiveName="kontoNotifierLib.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierLib/kontoNotifierLib">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
+        <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/main/webapp/WEB-INF/lib"/>
         <property name="java-output-path" value="/kontoNotifier-web/target/classes"/>
         <property name="context-root" value="kontoNotifier-web"/>
     </wb-module>

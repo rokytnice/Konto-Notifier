@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
@@ -14,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -35,18 +38,17 @@ public class KontoService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addKonto(KontoDTO konto) {
+	public Response addKonto(KontoDTO konto, @Context HttpServletRequest request ) {
 
+		HttpSession sess = request.getSession();
 		Response.ResponseBuilder builder = null;
 
 		try {
-			// TODO remove hack - generate user
-//			UserDTO user = new UserDTO();
-//			user.setEmail("tet@dij.de");
-//			user.setUsername("testuser1");
-//			kDAO.persist(user);
 
-			UserDTO u = (UserDTO) kDAO.getAll(new UserDTO()).iterator().next();// TODO get  user  from  session
+			UserDTO u = (UserDTO)sess.getAttribute("user");
+			if(u == null){
+				throw new Exception("no  user in session found ");
+			}
 			konto.setUser(u);
 			kDAO.persist(konto);
 

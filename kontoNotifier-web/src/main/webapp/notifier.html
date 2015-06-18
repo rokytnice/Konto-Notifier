@@ -44,6 +44,8 @@
 <!-- For minification, uncomment out this file -->
 <!-- <script type="text/javascript" src="js/app.min.js"></script> -->
 
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 <script type="text/javascript">
         $( document ).ready( function() {
 
@@ -147,7 +149,8 @@
 							<label>Minimum Euro</label> <input name="minValue" value=""
 								type="text"> <label>Maximum Euro</label> <input
 								name="maxValue" value="" type="text"> <br> <input
-								type="submit" value="Speichern"></input>
+								type="submit" value="Speichern"></input><br>
+								<a href="#" onclick="signOut();">Sign out</a>
 							<div id="formMsgs"></div>
 						</form>
 
@@ -184,6 +187,8 @@
 					</div>
 				</div>
 			</article>
+
+<a href="#" onclick="signOut();">Sign out</a>
 
 			<!-- Footer -->
 			<div data-role="footer" data-tap-toggle="false" data-position="fixed"
