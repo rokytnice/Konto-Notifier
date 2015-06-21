@@ -1,5 +1,0 @@
-#1420372478597
-#Sun Jan 04 12:54:38 CET 2015
-basic.dialogid=_bC4mEqztEoBAABA0Ln3TwIKhAQA
-basic.segnum=3
-basic.msgnum=2
