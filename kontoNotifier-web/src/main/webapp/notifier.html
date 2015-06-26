@@ -76,9 +76,6 @@
             });
         	
         	
-            getKontos();
-            
-           
            
             //Register an event listener on the submit action
             $('#reg').submit(function(event) {
@@ -125,16 +122,29 @@
             });
             return o;
         };
+
+        </script>
+    	<script type="text/template" id="nots-tmpl">
+            <% _.each(data, function(not) { %>
+            <tr>
+                <td><%=not.konto.ktonr%></td>
+    			<td><%=not.filter.serach%></a></td>            
+    			<td><%=not.filter.minValue%></a></td>
+     			<td><%=not.filter.maxValue%></a></td>
+    			 
+            </tr>
+            <% }); %>
+
     </script>
 </head>
 <body>
 	<div id="container">
 		<section>
 			<article id="not-art" data-role="page"
-				data-title="Kontodienst hinzufügen">
+				data-title="Kontoagent hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Kontoinformationsdienst hinzufügen</h3>
+					<h3>Kontoagenten</h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -159,46 +169,19 @@
 			</article>
 
 
+ 
 
-			<article id="nots-art" data-role="page" data-title="List  Notifiers">
-				<!-- Header -->
-				<div data-role="header" class="header">
-					<h3>Alle Kontoinformationsdienste</h3>
-				</div>
-				<!-- /Header -->
-				<div class="ui-content" role="main">
-					<div class="wrap">
-						<button id="refreshButton" data-role="button" data-inline="true"
-							data-icon="refresh">Kontodienstliste aktualisieren</button>
-						<table data-role="table" id="nots-table" data-mode="reflow"
-							class="app-responsive table-stroke">
-							<thead>
-								<tr>
-									<th data-priority="1">Kontonr.</th>
-									<th data-priority="2">Search</th>
-									<th data-priority="3">Min €</th>
-									<th data-priority="3">Max €</th>
-								</tr>
-							</thead>
-							<tbody id="nots">
-								<!-- see js template  nots-tmpl -->
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</article>
-
-<a href="#" onclick="signOut();">Sign out</a>
+ 
 
 			<!-- Footer -->
 			<div data-role="footer" data-tap-toggle="false" data-position="fixed"
 				data-theme="a">
 				<div data-role="navbar">
 					<ul>
-						<!--                         <li><a href="#intro-art" data-icon="home" class="ui-btn-active">Hauptmenü</a></li> -->
-						<li><a href="#not-art" data-icon="plus">Neuer Kontodienst</a></li>
+						 <li><a href="/notifier/index.html" data-icon="home" class="ui-btn-active">Hauptmenü</a></li> 
+						<li><a href="#not-art" data-icon="plus">Neuer Kontoagent</a></li>
 						<li><a href="#nots-art" data-icon="grid">Alle
-								Kontodienste</a></li>
+								Kontoagenten</a></li>
 					</ul>
 				</div>
 			</div>
@@ -208,17 +191,6 @@
 
 	</div>
 
-	<script type="text/template" id="nots-tmpl">
-        <% _.each(data, function(not) { %>
-        <tr>
-            <td><%=not.konto.ktonr%></td>
-			<td><%=not.filter.serach%></a></td>            
-			<td><%=not.filter.minValue%></a></td>
- 			<td><%=not.filter.maxValue%></a></td>
-			 
-        </tr>
-        <% }); %>
-    </script>
 </body>
 </html>
 

@@ -12,6 +12,18 @@ import javax.persistence.Table;
 @Table(name="KONTO")
 public class KontoDTO implements IDTO {
 
+	public KontoDTO() {
+		super();
+	}
+
+
+	public KontoDTO(String fieldRest) {
+		super();
+		fieldRest = fieldRest.replaceAll("\"\"", "");
+		String[] fields = fieldRest.split("&");
+		System.out.println(fields);
+	}
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "KONTO_ID")

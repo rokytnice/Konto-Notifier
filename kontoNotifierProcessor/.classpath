@@ -37,5 +37,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/java4hbci"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/kontoNotifierLib"/>
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.jboss.ide.eclipse.as.core.server.runtime.runtimeTarget/WildFly 8.x Runtime"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

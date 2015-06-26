@@ -1,0 +1,30 @@
+http://kontoagent.ddns.net
+
+#keystore mit cert erzeugen und ins configuration verzeichnis von wildfly kopieren
+ > keytool -genkey -alias kontoagent-keystore -keyalg RSA -keystore kontoagent.keystore -validity 10950
+
+
+#keystore realm anlegen in standalone-full.xml
+ <security-realm name="kontoagentRealm">
+                <server-identities>
+                    <ssl>
+                        <keystore path="kontoagent.keystore" relative-to="jboss.server.config.dir" keystore-password="A7uj89oil" alias="kontoagent.keystore" key-password="A7uj89oil"/>
+                    </ssl>
+                </server-identities>
+            </security-realm>
+
+
+
+# sll binding an realm 
+<server name="default-server">
+            <!-- ... -->
+                <https-listener name="https" socket-binding="https" security-realm="kontoagentRealm"/>
+
+
+
+
+
+##cronjob 
+
+*/10 *    * * *   wget http://localhost/kontoNotifierProcessor/rest/process > /dev/null
+

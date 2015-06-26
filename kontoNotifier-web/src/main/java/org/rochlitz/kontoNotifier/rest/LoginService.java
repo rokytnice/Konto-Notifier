@@ -17,11 +17,13 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import org.rochlitz.kontoNotfier.persistence.AllDAO;
 import org.rochlitz.kontoNotfier.persistence.TokenDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
+import org.rochlitz.kontoNotifier.security.Authentication;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
@@ -39,17 +41,22 @@ public class LoginService<JsonFactory> {
 	private static final String MY_GOOGLE_API_CLIENT = "906809457981-emoo2f0vobh740d25v9mb2o9f57142ci.apps.googleusercontent.com";
 	@Inject
 	AllDAO kDAO;
+	
+	@Inject
+	Authentication authServ;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response catchtoken(TokenDTO id_token, @Context HttpServletRequest request ) {
 
-		HttpSession sess = request.getSession();
 		Response.ResponseBuilder builder = null;
 		UserDTO user;
 		Payload payload;
 		String subject;
+		builder = Response.ok();
+		Response result = builder.build();
+		
 		try {
 			JsonFactory mJFactory = (JsonFactory) new GsonFactory();
 			
@@ -78,28 +85,25 @@ public class LoginService<JsonFactory> {
 					System.out.println("Invalid ID token.");
 				}
 				
+				Authentication authServ = new Authentication();
 				List<UserDTO> users = kDAO.getUserByMail( payload.getEmail() );
 				if(users.size() == 1){//user exist
 					user = users.get(0);
-					sess.setAttribute("user", user);
+					authServ.setUserToSession(request, user);
 				}else if(users.size() > 1){
 					System.out.println("more than 1 user found."); //TODO this is strange
 					
 				}else if(users.size() < 1 ){
 					user = new UserDTO( payload.getEmail() );
 					kDAO.persist( user );
-					sess.setAttribute("user", user);
+					authServ.setUserToSession(request, user);
 				}
 				
 			} else {
 				System.out.println("Invalid ID token.");
 			}
-			
-			
-		
-			
 
-			builder = Response.ok();
+			
 		} catch (ConstraintViolationException ce) {
 			// Handle bean validation issues
 			// builder = createViolationResponse(ce.getConstraintViolations());
@@ -116,7 +120,9 @@ public class LoginService<JsonFactory> {
 			// builder =
 			// Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
-		return builder.build();
+		return result;
 	}
+
+	
 
 }

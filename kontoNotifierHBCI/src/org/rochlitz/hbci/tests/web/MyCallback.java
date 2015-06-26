@@ -13,11 +13,11 @@ import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
 public class MyCallback extends HBCICallbackConsole {
 	// User data
 	private String pin ; // 
-	private String customerId ; //= "30746930";
+	private String customerId ; 
 	private String passphrase = "1"; // passport passwort   //TODO account passwd
 
 	// comdirect data
-	private String blz = "20041133";
+	private String blz;
 	private String hbciHost = "fints.comdirect.de/fints";
 	private String countryOfBank = "DE";
 	private String TANVerfahren = "901"; // mobile TAN = 901
@@ -26,9 +26,8 @@ public class MyCallback extends HBCICallbackConsole {
 	private String kontoSubNr = "00";
 	
 	//bankNotfier Stammdaten 
-	private String eMail = "andre.rochlitz@gmail.com";
-	private String userID = "000000000001";
-	private String kontoID = "000000000002"; //TODO DB PK 
+	private String userID ;
+	private String kontoID ;
 	
 	public MyCallback(NotifierDTO not) {
 		super();
@@ -37,6 +36,8 @@ public class MyCallback extends HBCICallbackConsole {
 		this.customerId = not.getKonto().getAccount();
 		this.kontoNr = String.valueOf(not.getKonto().getKtonr())+kontoNrFill;
 		this.kontoID = String.valueOf(not.getKonto().getId());
+		this.userID = String.valueOf(not.getUser().getId());
+		this.blz = String.valueOf(not.getKonto().getBlz());
 
 	}
 	
@@ -177,14 +178,7 @@ public class MyCallback extends HBCICallbackConsole {
 		this.kontoSubNr = kontoSubNr;
 	}
 
-	public String geteMail() {
-		return eMail;
-	}
-
-	public void seteMail(String eMail) {
-		this.eMail = eMail;
-	}
-
+	
 	public String getUserID() {
 		return userID;
 	}

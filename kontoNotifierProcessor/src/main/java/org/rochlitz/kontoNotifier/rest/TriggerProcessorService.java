@@ -2,6 +2,7 @@ package org.rochlitz.kontoNotifier.rest;
 
 import java.util.GregorianCalendar;
 
+import javax.ejb.Schedule;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,6 +19,7 @@ public class TriggerProcessorService {
 	@Inject
 	NotifierProcessor notCon;
 
+//	@Schedule(second="*/10", minute="*",hour="*", persistent=false)
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAll() {

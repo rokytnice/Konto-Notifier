@@ -5,8 +5,40 @@ function buildMemberRows(members) {
     return _.template( $( "#member-tmpl" ).html(), {"members": members});
 }
 
+
+
+
 /* Uses JAX-RS GET to retrieve current member list */
-function updateMemberTable() {
+function updateNotifiersTable() {
+    // Display the loader widget
+    $.mobile.loading("show");
+
+    $.ajax({
+        url: "rest/notifier",
+        cache: false,
+        success: function(data) {
+            $( "#notifiers" ).empty().append(buildNotifiersRows(data));
+            $( "#notifiers-table" ).table( "refresh" );
+        },
+        error: function(error) {
+            console.log("error updating table -" + error.status);
+        },
+        complete: function() {
+            // Hide the loader widget
+            $.mobile.loading("hide");
+            
+        }
+    });
+}
+
+/* Builds the updated table for the member list */
+function buildNotifiersRows(data) {
+    return _.template( $( "#notifiers-tmpl" ).html(), {"data": data});
+}
+
+
+
+function updatekontosTable() {
     // Display the loader widget
     $.mobile.loading("show");
 
@@ -14,20 +46,26 @@ function updateMemberTable() {
         url: "rest/konto",
         cache: false,
         success: function(data) {
-            $( "#members" ).empty().append(buildMemberRows(data));
-            $( "#member-table" ).table( "refresh" );
+            $( "#kontos" ).empty().append(buildkontosRows(data));
+            $( "#kontos-table" ).table( "refresh" );
         },
         error: function(error) {
-            //console.log("error updating table -" + error.status);
+            console.log("error updating table -" + error.status);
         },
         complete: function() {
             // Hide the loader widget
             $.mobile.loading("hide");
+            
         }
     });
 }
 
-/* Uses JAX-RS GET to retrieve current member list */
+/* Builds the updated table for the member list */
+function buildkontosRows(data) {
+    return _.template( $( "#kontos-tmpl" ).html(), {"data": data});
+}
+
+
 function getKontos() {
 
 	$select = $('#kontoSelection');
@@ -43,9 +81,10 @@ function getKontos() {
             	console.log(" ------------ -" + val.account + "  --------" + val.id);
               $select.append( new Option( val.account, val.id) );
             })
+            return data;
         },
         error: function(error) {
-            //console.log("error updating table -" + error.status);
+            console.log("error updating table -" + error.status);
         },
         complete: function() {
             // Hide the loader widget
@@ -102,11 +141,11 @@ function saveKonto(data) {
             //console.log("Member registered");
 
             //clear input fields
-            $('#reg')[0].reset();
+            $('#konto-reg')[0].reset();
 
-            $('#formMsgs').append($('<span class="success"> Kontodaten gespeichert.</span>'));
+            $('#konto-formMsgs').append($('<span class="success"> Kontodaten gespeichert.</span>'));
 
-            updateMemberTable();
+            updateNotifiersTable();
         },
         error: function(error) {
             if ((error.status == 409) || (error.status == 400)) {
@@ -119,7 +158,7 @@ function saveKonto(data) {
                 });
             } else {
                 //console.log("error - unknown server issue");
-                $('#formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+                $('#konto-formMsgs').append($('<span class="invalid">Unknown server error</span>'));
             }
         },
         complete: function() {
@@ -148,12 +187,12 @@ function saveNotifier(data) {
             //console.log("Member registered");
 
             //clear input fields
-            $('#reg')[0].reset();
+            $('#not-reg')[0].reset();
 
             //mark success on the registration form
-            $('#formMsgs').append($('<span class="success">Info-Service gespeichert.</span>'));
+            $('#not-formMsgs').append($('<span class="success">Info-Service gespeichert.</span>'));
 
-            updateMemberTable();
+            updateNotifiersTable();
         },
         error: function(error) {
             if ((error.status == 409) || (error.status == 400)) {
@@ -166,7 +205,7 @@ function saveNotifier(data) {
                 });
             } else {
                 //console.log("error - unknown server issue");
-                $('#formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+                $('#not-formMsgs').append($('<span class="invalid">Unknown server error</span>'));
             }
         },
         complete: function() {
@@ -177,54 +216,6 @@ function saveNotifier(data) {
 
 }
 
-
-
-
-function doRegistration(data) {
-    //clear existing  msgs
-    $('span.invalid').remove();
-    $('span.success').remove();
-
-    // Display the loader widget
-    $.mobile.loading("show");
-
-    $.ajax({
-        url: 'rest/registration',
-        contentType: "application/json",
-        dataType: "json",
-        type: "POST",
-        data: JSON.stringify(data),
-        success: function(data) {
-            //console.log("Member registered");
-
-            //clear input fields
-            $('#reg')[0].reset();
-
-            $('#formMsgs').append($('<span class="success"> Registrierung erfolgreich.</span>'));
-
-        },
-        error: function(error) {
-            if ((error.status == 409) || (error.status == 400)) {
-                //console.log("Validation error registering user!");
-
-                var errorMsg = $.parseJSON(error.responseText);
-
-                $.each(errorMsg, function(index, val) {
-                    $('<span class="invalid">' + val + '</span>').insertAfter($('#' + index));
-                });
-            } else {
-                //console.log("error - unknown server issue");
-                $('#formMsgs').append($('<span class="invalid">Unknown server error.</span>'));
-            }
-        },
-        complete: function() {
-            // Hide the loader widget
-            $.mobile.loading("hide");
-        }
-    });
-}
-
- 
 
 
 function sendToken(data) {
@@ -258,10 +249,11 @@ function sendToken(data) {
 }
 
 function signOut() {
-	 var profile = googleUser.getBasicProfile();
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
       console.log('User signed out.');
+//      document.getElementById("user").innerHTML = "";
+      document.getElementById("footer").hide();
     });
   }
 
@@ -279,10 +271,10 @@ function require(script) {
     });
 }
 
-function switchToApp()
+function redirect(path)
 {		
-		window.location = '/notifier/notifier.html';   
-		console.log("window.location  "+window.location );
+//	window.location
+	//location.replace(path);   
 }
 
 function onSignIn(googleUser) {
@@ -297,12 +289,15 @@ function onSignIn(googleUser) {
   var id_token = googleUser.getAuthResponse().id_token;
   console.log("ID Token: " + id_token);
 
+//  document.getElementById("user").innerHTML =  profile.getName() ;
+
+  document.getElementById("introtext").innerHTML = " ";
+ 
 
   var data = { "id_token":""+id_token+"" };
          
   sendToken( data );
-
-  switchToApp();
+//  document.getElementById("footer").show();
 
   
 };

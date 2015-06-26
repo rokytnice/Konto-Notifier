@@ -1,16 +1,16 @@
 package org.rochlitz.kontoNotifier;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
+
 import org.kapott.hbci.GV_Result.GVRKUms;
-import org.rochlitz.hbci.tests.web.GVBase;
 import org.rochlitz.hbci.tests.web.MyCallback;
 import org.rochlitz.hbci.tests.web.TestKontoAuszugThreaded;
+import org.rochlitz.kontoNotfier.message.EMailer;
 import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
 
 public class NotfierCallableTask implements Callable<Boolean> {
@@ -35,6 +35,8 @@ public class NotfierCallableTask implements Callable<Boolean> {
 			
 			Iterator<GVRKUms.BTag> iter = dpd.iterator();
 			
+			StringBuffer message = new StringBuffer();
+			
 			while(iter.hasNext()){
 				GVRKUms.BTag d = iter.next();
 				String str = d.toString();
@@ -45,11 +47,11 @@ public class NotfierCallableTask implements Callable<Boolean> {
 					if( 0 <=  usage.indexOf(not.getFilter().getSearch().toLowerCase()) ){ //-1 not found
 						//TODO found message
 						
-						System.out.println(" *********************** FOUND  *******************");
-						System.out.println(" " + usage);
-						System.out.println(" *********************** FOUND  *******************");
+						message.append(line+"\n\n");
 					}
 				}
+				
+				EMailer.mail(message.toString(), not.getUser().getEmail());
 				
 				boolean compaerRes = d.end.timestamp.before(new Date() ); //is day before today
 				str.isEmpty();

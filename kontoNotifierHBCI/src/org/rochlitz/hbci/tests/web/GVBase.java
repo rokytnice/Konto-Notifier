@@ -16,7 +16,7 @@ public class GVBase {
 	protected  MyCallback mCallback;
 	protected  Properties props;
 	protected  String fileanme;
-	public static final int DAY_OFFSET = -1; 
+	public static final int DAY_OFFSET = -1; //TODO m,uss -1 sein
 	protected HBCICallbackThreaded cbh;
 	protected HBCIPassport passport;
 	protected HBCIHandler handler;
@@ -36,7 +36,7 @@ public class GVBase {
 	public GVBase(MyCallback mc){
 		 mCallback = mc;
 		 props=new Properties();
-		 fileanme = "../../"+mCallback.getUserID()+"_"+mCallback.getKontoId()+"_passport.dat";
+		 fileanme = "/tmp/"+mCallback.getUserID()+"_"+mCallback.getKontoId()+"_passport.dat";
 		 iniProps();
 		 cbh = new HBCICallbackThreaded(mCallback);
 		 HBCIUtils.init(props, cbh);

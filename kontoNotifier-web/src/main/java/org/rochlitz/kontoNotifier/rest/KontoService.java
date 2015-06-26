@@ -24,6 +24,7 @@ import org.rochlitz.kontoNotfier.persistence.AllDAO;
 import org.rochlitz.kontoNotfier.persistence.IDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
+import org.rochlitz.kontoNotifier.security.Authentication;
 
 //   http://your_domain:port/display-name/url-pattern/path_from_rest_class 
 //   http://localhost:8080/kontoNotifier-web/rest/konto
@@ -34,26 +35,34 @@ public class KontoService {
 	@Inject
 	AllDAO kDAO;
 	private List<IDTO> list;
+	
+	@Inject
+	Authentication authServ;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addKonto(KontoDTO konto, @Context HttpServletRequest request ) {
 
-		HttpSession sess = request.getSession();
-		Response.ResponseBuilder builder = null;
-
+		Response.ResponseBuilder builder = Response.ok();
+		Response result = builder.build();
+		
 		try {
 
-			UserDTO u = (UserDTO)sess.getAttribute("user");
-			if(u == null){
-				throw new Exception("no  user in session found ");
-			}
-			konto.setUser(u);
-			kDAO.persist(konto);
+			Authentication authServ = new Authentication();
+			UserDTO user = authServ.getUserFromSession(request);
 
+			if(user == null){
+				//TODO exception
+				
+			}else{
+				konto.setUser(user);
+				kDAO.persist(konto);
+			}
+			
 			// Create an "ok" response
 			builder = Response.ok().entity(konto);
+			result = builder.build();
 		} catch (ConstraintViolationException ce) {
 			// Handle bean validation issues
 			// builder = createViolationResponse(ce.getConstraintViolations());
@@ -70,7 +79,7 @@ public class KontoService {
 			// builder =
 			// Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
-		return builder.build();
+		return result;
 	}
 	
 	
@@ -114,17 +123,19 @@ public class KontoService {
 	
 	 @GET
 	    @Produces(MediaType.APPLICATION_JSON)
-	    public List getAll() {
-	      
-		 List<KontoDTO> list=null; 
-		 try {
-			list = kDAO.getAll(  new KontoDTO() );
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		 
-		 return list;
+	    public List getAll(@Context HttpServletRequest request ) {
+			Authentication authServ = new Authentication();
+			UserDTO user = authServ.getUserFromSession(request);
+			List<KontoDTO> list = null;
+			try {
+				list = kDAO.getKontenOfUser(user); 
+														// session
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			return list;
 	    }
 
 }

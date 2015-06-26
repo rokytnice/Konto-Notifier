@@ -1,0 +1,309 @@
+<html lang="en">
+<head>
+<meta name="google-signin-scope" content="profile email">
+<meta name="google-signin-client_id"
+	content="906809457981-emoo2f0vobh740d25v9mb2o9f57142ci.apps.googleusercontent.com">
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>-->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/screen.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/screen.min.css"/>-->
+
+<!-- Set viewport scaling and zoom features -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery-2.0.3.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery-2.0.3.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/lodash-2.4.1.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/lodash-2.4.1.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/app.js"></script>
+<!-- For minification, uncomment out this file -->
+<!-- <script type="text/javascript" src="js/app.min.js"></script> -->
+
+
+ <script type="text/javascript">
+ $( document ).ready( function() {
+     //setup the app after all scripts have loaded
+     
+     document.getElementById("introtext").innerHTML = "Bitte Google Account anmelden.";
+//      document.getElementById("footer").hide();
+
+     
+     $(function() {
+         // Enhance the footer since it is present outside the page definition and hence not enhanced automatically.
+         $( "[data-role='footer']" ).toolbar();
+         $( "[data-role='navbar']" ).navbar();
+     });
+     
+     // Update the contents of the toolbars
+     $( document ).on( "pageshow", "[data-role='page']", function() {
+         var current = $( this ).jqmData( "title" );
+         // Remove active class from nav buttons
+         $( "[data-role='navbar'] a.ui-btn-active" ).removeClass( "ui-btn-active" );
+         // Add active class to current nav button
+         $( "[data-role='navbar'] a" ).each(function() {
+             if ( $( this ).text() === current ) {
+                 $( this ).addClass( "ui-btn-active" );
+             }
+         });
+     });
+
+
+     $("#notifiers-art").on("pagebeforeshow", function() {
+         // Fetches the initial   data and populates the table using lodash templates
+         updateNotifiersTable();
+     });
+
+     $("#refreshButton-notifiers").click(function(event) {
+    	 updateNotifiersTable();
+     });
+
+     $("#kontos-art").on("pagebeforeshow", function() {
+         // Fetches the initial   data and populates the table using lodash templates
+         updatekontosTable();
+     });
+
+     $("#refreshButton-kontos").click(function(event) {
+    	 updatekontosTable();
+     });
+
+     $("#not-art").on("pagebeforeshow", function() {
+         getKontos();
+         $("#not-formMsgs").empty();
+     });
+
+     $("#kontoanlegen-art").on("pagebeforeshow", function() {
+    	 $("#konto-formMsgs").empty();
+     });
+
+     
+     $('#not-reg').submit(function(event) {
+         event.preventDefault();
+         var dataNot = JSON.stringify($('#not-reg').serialize());
+         saveNotifier(dataNot);
+     });
+
+     $('#konto-reg').submit(function(event) {
+         event.preventDefault();
+         var dataKonto = JSON.stringify($('#konto-reg').serialize());
+         saveKonto(dataKonto);
+     });
+
+     
+ });
+
+             
+</script>
+</head>
+	<body>
+
+
+	<div id="container">
+	
+		<section>
+			<article id="intro-art" data-role="page" data-title="Kontoagent Home">
+				<!-- Header -->
+				<div data-role="header" class="header">
+						<h3>Kontoagenten</h3>
+				</div>
+				<!-- /Header -->
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<p id="introtext"><p>
+						<p></p>
+						<br>
+						<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+														<a href="#" onclick="signOut();">Sign out</a>
+						
+					</div>
+				</div>
+			</article>
+
+		<article id="kontoanlegen-art" data-role="page"
+				data-title="Notifier hinzufügen">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Kontoagent</h3>
+				</div>
+				<!-- /Header -->
+				<div class="ui-content" role="main">
+					<div class="wrap">
+
+						<form name="konto-reg" id="konto-reg" data-ajax="false">
+
+							<h2>Zugangsdaten Online Banking:</h2>
+							<br> 
+							<label>Kontonummer</label> <input name="ktonr" value="" 
+								type="text"> <label>Bankleitzahl</label> <input
+								name="blz" value="" type="text"> <label>Zugangsnummer</label>
+							<input name="account" value="" type="text"> <label>Passwort</label>
+							<input name="password" value="" type="password"> <br>
+							<input type="submit" value="Speichern"></input> <br>
+							<div id="konto-formMsgs"></div>
+						</form>
+
+					</div>
+				</div>
+			</article>
+		
+			<article id="not-art" data-role="page"
+				data-title="Kontoagent hinzufügen">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Kontoagenten</h3>
+				</div>
+				<!-- /Header -->
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<form name="not-reg" id="not-reg" data-ajax="false">
+
+							<h2></h2>
+							<br> <label>Konto</label> <select id="kontoSelection"
+								name="kontoSelection" value="" type="text">
+								<option id="null">Konto auswählen ...</option>
+							</select> <label>Suche</label> <input name="search" value="" type="text">
+							<label>Minimum Euro</label> <input name="minValue" value=""
+								type="text"> <label>Maximum Euro</label> <input
+								name="maxValue" value="" type="text"> <br> <input
+								type="submit" value="Speichern"></input><br>
+							<div id="not-formMsgs"></div>
+						</form>
+
+					</div>
+				</div>
+			</article>
+
+
+			<article id="notifiers-art" data-role="page" data-title="Liste von Agenten">
+                <!-- Header -->
+                <div data-role="header" class="header" data-position="fixed">
+                    <h3>Alle Agenten</h3>
+                </div>
+                <!-- /Header -->
+
+                <div class="ui-content" role="main">
+                    <div class="wrap">
+                        <button id="refreshButton-notifiers" data-role="button" data-inline="true" data-icon="refresh">Aktualisiere Liste</button>
+                        <table data-role="table" id="notifiers-table" data-mode="reflow" class="app-responsive table-stroke">
+                            <thead>
+                                <tr>
+                                    <th data-priority="1">Konto</th>
+                                    <th data-priority="2">Suchtext</th>
+                                    <th data-priority="3">Min €</th>
+                                    <th data-priority="4">Max € #</th>
+                                </tr>
+                            </thead>
+                            <tbody id="notifiers">
+                            <!-- This is where the list of members gets populated by the templates. This row is only
+                                here as an example of the code that will be inserted.
+                            <tr>
+                                <th>0</td>
+                                <td>John Smith</td>
+                                <td><a href="mailto:john.smith@mailinator.com" class="ui-link">john.smith@mailinator.com</a></td>
+                                <td><a href="tel:2125551212" class="ui-link">Call</a> or <a href="sms:2125551212" class="ui-link">SMS</a> 2125551212</td>
+                                <td><a href="rest/members/0" rel="external" target="_blank" class="resturl ui-link">JSON</a></td>
+                            </tr>
+                            -->
+                            </tbody>
+                        </table>
+                        <div class="member-foot">
+                            <!-- Sets the JAX-RS URLs to retrieve all members either as XML or JSON data.-->
+                            REST URL for all members:
+                            <a href="rest/notifier" target="_blank" rel="external">JSON</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+
+			<article id="kontos-art" data-role="page" data-title="List Kontos">
+                <!-- Header -->
+                <div data-role="header" class="header" data-position="fixed">
+                    <h3>Alle Agenten</h3>
+                </div>
+                <!-- /Header -->
+
+                <div class="ui-content" role="main">
+                    <div class="wrap">
+                        <button id="refreshButton-kontos" data-role="button" data-inline="true" data-icon="refresh">Aktualisiere Liste</button>
+                        <table data-role="table" id="kontos-table" data-mode="reflow" class="app-responsive table-stroke">
+                            <thead>
+                                <tr>
+                                    <th data-priority="1">Kontonummer</th>
+                                    <th data-priority="2">BLZ</th>
+                                    <th data-priority="3">Account</th>
+                                </tr>
+                            </thead>
+                            <tbody id="kontos">
+                            
+                            </tbody>
+                        </table>
+                        <div class="member-foot">
+                            <!-- Sets the JAX-RS URLs to retrieve all members either as XML or JSON data.-->
+                            REST URL for all kontos:
+                            <a href="rest/konto" target="_blank" rel="external">JSON</a>
+                        </div>
+                    </div>
+                </div>
+            </article>	
+
+
+			<!-- Footer -->
+			<div data-role="footer" data-tap-toggle="false" data-position="fixed"
+				data-theme="a" >
+				<div data-role="navbar">
+					<ul>
+					 								
+						<li><a href="#intro-art" data-icon="home" class="ui-btn-active">Hauptmenü</a></li>
+                        <li><a href="#kontoanlegen-art" data-icon="plus">Konto anlegen</a></li>
+                        <li><a href="#kontos-art" data-icon="grid">Kontenliste</a></li>
+                        <li><a href="#not-art" data-icon="plus">Agent anlegen</a></li>
+                         <li><a href="#notifiers-art" data-icon="grid">Agentenliste</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- /Footer -->
+
+		</section>
+
+	</div>
+
+	<script type="text/template" id="notifiers-tmpl">
+        <% _.each(data, function(row) { %>
+        <tr>
+            <th><%=row.konto.ktonr%></td>
+            <td><%=row.filter.search%></td>
+			<td><%=row.filter.minValue%></td>
+			<td><%=row.filter.maxValue%></td>
+        </tr>
+        <% }); %>
+    </script>
+    	<script type="text/template" id="kontos-tmpl">
+        <% _.each(data, function(row) { %>
+        <tr>
+            <th><%=row.ktonr%></td>
+            <td><%=row.blz%></td>
+			<td><%=row.account%></td>
+        </tr>
+        <% }); %>
+    </script>
+    
+</body>
+</html>

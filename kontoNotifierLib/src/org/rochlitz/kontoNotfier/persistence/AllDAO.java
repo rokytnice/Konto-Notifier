@@ -67,4 +67,21 @@ public class AllDAO {
 		return result;
 	}
 
+	public List<NotifierDTO> getNotifierOfUser(UserDTO user) throws Exception {
+		Query q = em.createQuery("SELECT e FROM NotifierDTO e WHERE e.user.id = :userid");
+		q.setParameter("userid", user.getId());
+		@SuppressWarnings("unchecked")
+		List<NotifierDTO> result =  q.getResultList();
+		return result;
+	}
+
+	public List<KontoDTO> getKontenOfUser(UserDTO user) throws Exception {
+		Query q = em.createQuery("SELECT e FROM KontoDTO e WHERE e.user.id = :userid");
+		q.setParameter("userid", user.getId());
+		@SuppressWarnings("unchecked")
+		List<KontoDTO> result =  q.getResultList();
+		return result;
+	}
+
+	
 }

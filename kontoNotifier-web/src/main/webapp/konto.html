@@ -76,11 +76,7 @@
                 updateMemberTable();
             });
 
-            //Clear member registration and error messages on page change
-            $("#register-art").on("pagebeforeshow", function(event) {
-                $("#formMsgs").empty();
-                $('span.invalid').remove();
-            });
+           
         });
 
         $.fn.serializeObject = function() {
@@ -110,7 +106,7 @@
 				data-title="Notifier hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Konto Information Service</h3>
+					<h3>Kontoagent</h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -139,9 +135,9 @@
             <div data-role="footer" data-tap-toggle="false" data-position="fixed" data-theme="a">
                 <div data-role="navbar">
                     <ul>
-                        <li><a href="#intro-art" data-icon="home" class="ui-btn-active">Home</a></li>
-                        <li><a href="#register-art" data-icon="plus">Add a Member</a></li>
-                        <li><a href="#member-art" data-icon="grid">List Members</a></li>
+                        <li><a href="/notifier/index.html" data-icon="home" class="ui-btn-active">Hauptmenü</a></li>
+                        <li><a href="/notifier/konto.html" data-icon="plus">Neues Konto</a></li>
+                        <li><a href="/notifier/konten.html" data-icon="grid">Alle Konten</a></li>
                     </ul>
                 </div>
             </div>
