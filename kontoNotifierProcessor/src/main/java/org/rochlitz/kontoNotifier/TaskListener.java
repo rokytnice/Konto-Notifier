@@ -1,12 +1,9 @@
 package org.rochlitz.kontoNotifier;
 
 import java.util.concurrent.Future;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.enterprise.concurrent.ManagedExecutorService;
 import javax.enterprise.concurrent.ManagedTaskListener;
-import javax.inject.Inject;
 
 public class TaskListener implements ManagedTaskListener {
 //	@Inject

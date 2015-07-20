@@ -5,14 +5,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.rochlitz.hbci.tests.web.MyCallback;
-import org.rochlitz.hbci.tests.web.TestKontoAuszugThreaded;
+import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
 import org.rochlitz.kontoNotfier.message.EMailer;
 import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
 
+@Named("NotfierCallableTask")
 public class NotfierCallableTask implements Callable<Boolean> {
 
 	private NotifierDTO not;
@@ -28,8 +29,11 @@ public class NotfierCallableTask implements Callable<Boolean> {
 			// Thread.sleep(5000);
 			// logger.info("Finished	sleeping!");
 
-			MyCallback mc = new MyCallback(not);
-			TestKontoAuszugThreaded t = new TestKontoAuszugThreaded(mc);
+			MyCallback mc = new MyCallback(not.getKonto());
+			
+			System.out.println(" +++++++++++++++++++  callable task user " + not.getUser().getEmail()  + " - " +not.getUser().getId() + "  konto : "  + not.getKonto().getKtonr()  );
+			
+			KontoAuszugThreaded t = new KontoAuszugThreaded(mc);
 			GVRKUms result = t.getAuszug();
 			List dpd = result.getDataPerDay();
 			
@@ -44,10 +48,24 @@ public class NotfierCallableTask implements Callable<Boolean> {
 				while(iterLines.hasNext()){
 					GVRKUms.UmsLine line = iterLines.next();
 					String usage = line.usage.toString().toLowerCase();
-					if( 0 <=  usage.indexOf(not.getFilter().getSearch().toLowerCase()) ){ //-1 not found
-						//TODO found message
-						
-						message.append(line+"\n\n");
+
+					if( not.getFilter().getSearch() != null ){
+						if( 0 <=  usage.indexOf(not.getFilter().getSearch().toLowerCase()) ){ //-1 not found
+							//TODO found message
+							message.append(line+"\n\n");
+						}
+					}
+					if( not.getFilter().getMinValue() != null ){
+						if( not.getFilter().getMinValue() > line.value.getLongValue() ){ //-1 not found
+							//TODO found message
+							message.append(line+"\n\n");
+						}
+					}
+					if( not.getFilter().getMaxValue()  != null  ){
+						if(  not.getFilter().getMaxValue() < line.value.getLongValue() ){ //-1 not found
+							//TODO found message
+							message.append(line+"\n\n");
+						}
 					}
 				}
 				

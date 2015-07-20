@@ -16,7 +16,7 @@ public class GVBase {
 	protected  MyCallback mCallback;
 	protected  Properties props;
 	protected  String fileanme;
-	public static final int DAY_OFFSET = -1; //TODO m,uss -1 sein
+	public static final int DAY_OFFSET = -5; //TODO m,uss -1 sein
 	protected HBCICallbackThreaded cbh;
 	protected HBCIPassport passport;
 	protected HBCIHandler handler;
@@ -36,7 +36,9 @@ public class GVBase {
 	public GVBase(MyCallback mc){
 		 mCallback = mc;
 		 props=new Properties();
+		 //TODO filename in app properties
 		 fileanme = "/tmp/"+mCallback.getUserID()+"_"+mCallback.getKontoId()+"_passport.dat";
+		 System.out.println("**************  nutze  passport " + fileanme);
 		 iniProps();
 		 cbh = new HBCICallbackThreaded(mCallback);
 		 HBCIUtils.init(props, cbh);
@@ -57,7 +59,7 @@ public class GVBase {
     
     protected void writeToFile(Properties results){
     	
-    	String filePath = "C:\\workspace\\grioNotifier\\kontoNotifier\\out\\KontoAuszug"+System.currentTimeMillis()+".txt";
+    	String filePath = "KontoAuszug"+System.currentTimeMillis()+".txt";
     	try {
 			results.store( new FileOutputStream(filePath), String.valueOf(System.currentTimeMillis()) );
 		} catch (FileNotFoundException e) {

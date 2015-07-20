@@ -1,5 +1,7 @@
 package org.rochlitz.kontoNotfier.persistence;
 
+import java.lang.reflect.Field;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,23 +11,63 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="FILTER")
-public class FilterDTO implements IDTO {
+public class FilterDTO  implements IDTO {
+	
+//	public FilterDTO(String fieldRest) {
+//		super(fieldRest);
+//	}
+	
+	public FilterDTO() {
+		super();
+	}
+	
+	public FilterDTO(String fieldRest) {
+		super();
+		fieldRest = fieldRest.replaceAll("\"", "");
+		String[] fields = fieldRest.split("&");
+		
+		for(String property : fields){
+			String[] keyValue = property.split("=");
+			try {
+				if(keyValue.length<=1){//no value for key
+					continue;
+				}
+				String key = keyValue[0];
+				String value = keyValue[1];
+				
+				Field field = this.getClass().getDeclaredField(key);
+				field.setAccessible(true);
+				Class<?> typeOF = field.getType();
+				 
+				if(typeOF.equals(Integer.class)){
+					 field.set(this,Integer.parseInt( value ));
+				 }if(typeOF.isPrimitive()){//long sind die einzigsten primitiven die bisher verwendet werden
+					 field.set(this,Integer.parseInt( value ));
+				 }else{
+					 field.set(this,keyValue[1]);
+				 }
+			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue
 	@Column(name = "FILTER_ID")
-	private int Id;
+	private Integer Id;
 	
 	@Column(name = "SEARCH")
 	private String search;  
 	
 	@Column(name = "MIN")
-	private int minValue;
+	private Integer minValue;
 	
 	@Column(name = "MAX")
-	private int maxValue;
+	private Integer maxValue;
 	
 	@Column(name = "OPERATOR_OR")
 	private boolean operatorOR;
@@ -58,16 +100,16 @@ public class FilterDTO implements IDTO {
 	public void setBuchungsText(String buchungsText) {
 		this.search = buchungsText;
 	}
-	public int getMinValue() {
+	public Integer getMinValue() {
 		return minValue;
 	}
-	public void setMinValue(int minValue) {
+	public void setMinValue(Integer minValue) {
 		this.minValue = minValue;
 	}
-	public int getMaxValue() {
+	public Integer getMaxValue() {
 		return maxValue;
 	}
-	public void setMaxValue(int maxValue) {
+	public void setMaxValue(Integer maxValue) {
 		this.maxValue = maxValue;
 	}
 	public boolean isOperatorOR() {
@@ -112,10 +154,10 @@ public class FilterDTO implements IDTO {
 	public void setSearchInBuchungAuftraggeber(boolean searchInBuchungAuftraggeber) {
 		this.searchInBuchungAuftraggeber = searchInBuchungAuftraggeber;
 	}
-	public int getId() {
+	public Integer getId() {
 		return Id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		Id = id;
 	}
 	public long getKontoSelection() {

@@ -15,9 +15,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
+import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
+import org.rochlitz.hbci.tests.web.MyCallback;
 import org.rochlitz.kontoNotfier.persistence.AllDAO;
 import org.rochlitz.kontoNotfier.persistence.FilterDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
@@ -39,8 +40,7 @@ public class NotifierService {
 	public Response addFilterANDNotfier(FilterDTO filter,
 			@Context HttpServletRequest request) {
 
-		Response.ResponseBuilder builder = Response.ok();
-		Response result = builder.build();
+		Response result = null;
 
 		try {
 
@@ -58,8 +58,10 @@ public class NotifierService {
 
 			kDAO.persist(filter);
 			kDAO.persist(not);
+			
+			
 			// Create an "ok" response
-			builder = Response.ok().entity(filter);
+			result = Response.ok(filter).build();
 		} catch (ConstraintViolationException ce) {
 			// Handle bean validation issues
 			// builder = createViolationResponse(ce.getConstraintViolations());
@@ -76,7 +78,7 @@ public class NotifierService {
 			// builder =
 			// Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
-		return result;
+		 return result;
 	}
 
 	@GET

@@ -102,7 +102,7 @@ public class TestKontoAuszugThreadedOld extends BasisApp
     
     private static void writeToFile(Properties results){
     	
-    	String filePath = "C:\\workspace\\grioNotifier\\kontoNotifier\\out\\KontoAuszug"+System.currentTimeMillis()+".txt";
+    	String filePath = "KontoAuszug"+System.currentTimeMillis()+".txt";
  
     	try {
 			results.store( new FileOutputStream(filePath), String.valueOf(System.currentTimeMillis()) );

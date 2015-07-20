@@ -13,13 +13,13 @@ import org.kapott.hbci.status.HBCIExecStatus;
 import org.kapott.hbci.structures.Konto;
 
 @Stateless
-public class TestKontoAuszugThreaded extends GVBase
+public class KontoAuszugThreaded extends GVBase
 {
-    public TestKontoAuszugThreaded(MyCallback mc){
+    public KontoAuszugThreaded(MyCallback mc){
 		super(mc);
 	}
 
-    public TestKontoAuszugThreaded( ){
+    public KontoAuszugThreaded( ){
     	super();
 	}
     
@@ -38,7 +38,7 @@ public class TestKontoAuszugThreaded extends GVBase
         
         job.setParam("startdate", calStart.getTime() );
         job.setParam("enddate",  calEnd.getTime());
-        job.addToQueue();
+        job.addToQueue(passport.getCustomerId());
        
      // execute dialog
         HBCIExecStatus dialogStatus=handler.execute();
@@ -52,7 +52,7 @@ public class TestKontoAuszugThreaded extends GVBase
         	System.out.println("");
         }
         Properties results = job.getJobResult().getResultData();
-        writeToFile(results);
+//        writeToFile(results);
         // print information about complete dialog
         if (!dialogStatus.isOK()) {
             System.out.println("some error has occured during execution of the HBCI dialog:");
@@ -77,7 +77,7 @@ public class TestKontoAuszugThreaded extends GVBase
 	public static void main(String[] args)
     {
 		MyCallback mc = new MyCallback();
-		 new TestKontoAuszugThreaded(mc).getAuszug();
+		 new KontoAuszugThreaded(mc).getAuszug();
     }
    
 }

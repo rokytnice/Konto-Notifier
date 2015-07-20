@@ -25,15 +25,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-//TODO activate findbug pmd, checkstyle ..
-//TODO logging
-//TODO bean validation
-//TODO js validation
-//TODO http port 90 auf 443 umleiten 
-//TODO oauth
-//TODO - contents - wie dialoge- über rest service?
-//TODO jeder änderung des notifier durch eine nutzer - per mail bestatigen
-// ejb eliminates the need for manual transaction demarcation
 
 @Stateless
 public class AllDAO {
@@ -41,9 +32,10 @@ public class AllDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public void persist(IDTO dto) throws Exception {
-		em.merge(dto);
+	public IDTO persist(IDTO dto) throws Exception {
+		IDTO result = em.merge(dto);
 		em.flush();
+		return result;
 	}
 
 	// TODO genercis?

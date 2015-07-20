@@ -2,7 +2,7 @@ package org.rochlitz.kontoNotifier.rest;
 
 import java.util.GregorianCalendar;
 
-import javax.ejb.Schedule;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,12 +14,12 @@ import org.rochlitz.kontoNotifier.NotifierProcessor;
 //   http://your_domain:port/display-name/url-pattern/path_from_rest_class 
 //   http://localhost:8080/kontoNotifier-web/rest/konto
 @Path("/process")
+@Stateless
 public class TriggerProcessorService {
 
 	@Inject
 	NotifierProcessor notCon;
 
-//	@Schedule(second="*/10", minute="*",hour="*", persistent=false)
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public String getAll() {

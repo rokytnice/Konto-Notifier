@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="USER")
-public class UserDTO implements IDTO {
+public class UserDTO  implements IDTO {
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class UserDTO implements IDTO {
 		email=email2;
 	}
 	public UserDTO() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 	public String getPassword() {
 		return password;

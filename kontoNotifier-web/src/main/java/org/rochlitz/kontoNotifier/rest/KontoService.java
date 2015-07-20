@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
@@ -20,8 +19,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
+import org.rochlitz.hbci.tests.web.MyCallback;
 import org.rochlitz.kontoNotfier.persistence.AllDAO;
-import org.rochlitz.kontoNotfier.persistence.IDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
 import org.rochlitz.kontoNotifier.security.Authentication;
@@ -34,7 +34,6 @@ public class KontoService {
 
 	@Inject
 	AllDAO kDAO;
-	private List<IDTO> list;
 	
 	@Inject
 	Authentication authServ;
@@ -57,8 +56,13 @@ public class KontoService {
 				
 			}else{
 				konto.setUser(user);
-				kDAO.persist(konto);
+				konto = (KontoDTO) kDAO.persist(konto);//TODO 
 			}
+			
+			MyCallback mc = new MyCallback(konto);
+			KontoAuszugThreaded t = new KontoAuszugThreaded(mc);
+			t.getAuszug();
+			
 			
 			// Create an "ok" response
 			builder = Response.ok().entity(konto);
@@ -121,7 +125,7 @@ public class KontoService {
 	}
 	
 	
-	 @GET
+	    @GET
 	    @Produces(MediaType.APPLICATION_JSON)
 	    public List getAll(@Context HttpServletRequest request ) {
 			Authentication authServ = new Authentication();
