@@ -42,6 +42,10 @@
  $( document ).ready( function() {
      //setup the app after all scripts have loaded
      
+//      if(profile == null){
+//     	 signOut();
+//          }
+     
      document.getElementById("introtext").innerHTML = "Bitte Google Account anmelden.";
 //      document.getElementById("footer").hide();
 
@@ -224,9 +228,6 @@
                             </tbody>
                         </table>
                         <div class="member-foot">
-                            <!-- Sets the JAX-RS URLs to retrieve all members either as XML or JSON data.-->
-                            REST URL for all members:
-                            <a href="rest/notifier" target="_blank" rel="external">JSON</a>
                         </div>
                     </div>
                 </div>
@@ -236,7 +237,7 @@
 			<article id="kontos-art" data-role="page" data-title="List Kontos">
                 <!-- Header -->
                 <div data-role="header" class="header" data-position="fixed">
-                    <h3>Alle Agenten</h3>
+                    <h3>Alle Kontoverbindungen</h3>
                 </div>
                 <!-- /Header -->
 
@@ -256,9 +257,6 @@
                             </tbody>
                         </table>
                         <div class="member-foot">
-                            <!-- Sets the JAX-RS URLs to retrieve all members either as XML or JSON data.-->
-                            REST URL for all kontos:
-                            <a href="rest/konto" target="_blank" rel="external">JSON</a>
                         </div>
                     </div>
                 </div>

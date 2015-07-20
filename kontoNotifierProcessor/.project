@@ -3,9 +3,9 @@
 	<name>kontoNotifierProcessor</name>
 	<comment></comment>
 	<projects>
-		<project>kontoNotifierHBCI</project>
 		<project>java4hbci</project>
 		<project>kontoNotifierLib</project>
+		<project>kontoNotifierHBCI</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

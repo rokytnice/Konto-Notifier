@@ -8,7 +8,6 @@ function buildMemberRows(members) {
 
 
 
-/* Uses JAX-RS GET to retrieve current member list */
 function updateNotifiersTable() {
     // Display the loader widget
     $.mobile.loading("show");
@@ -19,6 +18,30 @@ function updateNotifiersTable() {
         success: function(data) {
             $( "#notifiers" ).empty().append(buildNotifiersRows(data));
             $( "#notifiers-table" ).table( "refresh" );
+        },
+        error: function(error) {
+            console.log("error updating table -" + error.status);
+        },
+        complete: function() {
+            // Hide the loader widget
+            $.mobile.loading("hide");
+            
+        }
+    });
+}
+
+
+
+function updateKontenTable() {
+    // Display the loader widget
+    $.mobile.loading("show");
+
+    $.ajax({
+        url: "rest/notifier",
+        cache: false,
+        success: function(data) {
+            $( "#kontos" ).empty().append(buildNotifiersRows(data));
+            //$( "#kontos-table" ).table( "refresh" ); //TODO dosnt work
         },
         error: function(error) {
             console.log("error updating table -" + error.status);
@@ -136,7 +159,7 @@ function saveKonto(data) {
         contentType: "application/json",
         dataType: "json",
         type: "POST",
-        data: JSON.stringify(data),
+        data: data,
         success: function(data) {
             //console.log("Member registered");
 
@@ -144,8 +167,8 @@ function saveKonto(data) {
             $('#konto-reg')[0].reset();
 
             $('#konto-formMsgs').append($('<span class="success"> Kontodaten gespeichert.</span>'));
-
-            updateNotifiersTable();
+            
+            updateKontenTable();
         },
         error: function(error) {
             if ((error.status == 409) || (error.status == 400)) {
@@ -182,7 +205,7 @@ function saveNotifier(data) {
         contentType: "application/json",
         dataType: "json",
         type: "POST",
-        data: JSON.stringify(data),
+        data: data,
         success: function(data) {
             //console.log("Member registered");
 
@@ -277,9 +300,11 @@ function redirect(path)
 	//location.replace(path);   
 }
 
+var profile;
+
 function onSignIn(googleUser) {
   // Useful data for your client-side scripts:
-  var profile = googleUser.getBasicProfile();
+  profile = googleUser.getBasicProfile();
   console.log("ID: " + profile.getId()); // Don't send this directly to your server!
   console.log("Name: " + profile.getName());
   console.log("Image URL: " + profile.getImageUrl());

@@ -26,8 +26,8 @@ public class EMailer {
  
 		Session session = Session.getInstance(props,
 			new javax.mail.Authenticator() {
-				protected PasswordAuthentication getPasswordAuthentication() {
-					return new PasswordAuthentication("rochlitz.consulting@gmail.com","");//TODO ohnae passw
+				protected PasswordAuthentication getPasswordAuthentication() {//TODO put ist to properties file and dont check in
+					return new PasswordAuthentication("rochlitz.consulting@gmail.com","A7uj89oil");//TODO ohnae passw
 				}
 			});
  

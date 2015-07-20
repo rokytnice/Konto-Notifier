@@ -28,3 +28,9 @@ http://kontoagent.ddns.net
 
 */10 *    * * *   wget http://localhost/kontoNotifierProcessor/rest/process > /dev/null
 
+
+
+
+
+########### remote server eclipse deployment -- http://www.mastertheboss.com/eclipse/jboss-tools/deploy-applications-to-a-remote-wildfly-server-using-eclipse
+sudo perl deamon.pl
