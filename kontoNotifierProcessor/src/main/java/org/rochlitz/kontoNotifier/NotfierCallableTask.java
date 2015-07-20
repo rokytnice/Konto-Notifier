@@ -69,6 +69,7 @@ public class NotfierCallableTask implements Callable<Boolean> {
 					}
 				}
 				
+				
 				EMailer.mail(message.toString(), not.getUser().getEmail());
 				
 				boolean compaerRes = d.end.timestamp.before(new Date() ); //is day before today

@@ -49,11 +49,14 @@ public class NotifierProcessor {
 			Iterator<NotifierDTO> iter = nots.iterator();
 			while(iter.hasNext()){
 				notTasks.add( new NotfierCallableTask(  iter.next() )  );
+				NotfierCallableTask n = new NotfierCallableTask(  iter.next() );
+				n.call();
 			}
 			
 			notTasks.addAll( notTasks);
 
-		  executorService.invokeAll(  notTasks);
+			//TODO clean up code  --- beacause disabled threading - ist schon gelöst in HBCICallbackThreaded
+//		  executorService.invokeAll(  notTasks);
 
 
 		} catch (Exception e) {
