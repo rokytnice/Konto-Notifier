@@ -30,7 +30,6 @@ public class NotfierCallableTask implements Callable<Boolean> {
 			// Thread.sleep(5000);
 			// logger.info("Finished	sleeping!");
 			
-			HBCIUtils.done();
 			MyCallback mc = new MyCallback(not.getKonto());
 			
 			System.out.println(" +++++++++++++++++++  callable task user " + not.getUser().getEmail()  + " - " +not.getUser().getId() + "  konto : "  + not.getKonto().getKtonr()  );
@@ -83,7 +82,7 @@ public class NotfierCallableTask implements Callable<Boolean> {
 					+ "   filter - " + not.getFilter().getSearch());
 			
 			
-			HBCIUtils.done();//clean up data structure - need to be done for new baking connection
+			HBCIUtils.doneThread();//clean up data structure - need to be done for new baking connection
 			// logger.info("process task for Not id " + not.getId());
 			// TODO hbci execute
 			// TODO JMS , email
@@ -91,6 +90,7 @@ public class NotfierCallableTask implements Callable<Boolean> {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			HBCIUtils.doneThread();
 		}
 		return new Boolean(true); // sucess
 	}

@@ -63,8 +63,6 @@ public class KontoService {
 			MyCallback mc = new MyCallback(konto);
 			KontoAuszugThreaded t = new KontoAuszugThreaded(mc);
 			t.getAuszug();
-			HBCIUtils.done();//clean up data structure - need to be done for new baking connection
-			
 			
 			// Create an "ok" response
 			builder = Response.ok().entity(konto);
@@ -85,6 +83,7 @@ public class KontoService {
 			// builder =
 			// Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
+		HBCIUtils.doneThread();//clean up data structure - need to be done for new baking connection
 		return result;
 	}
 	
