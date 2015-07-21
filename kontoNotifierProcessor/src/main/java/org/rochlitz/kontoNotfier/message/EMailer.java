@@ -1,5 +1,7 @@
 package org.rochlitz.kontoNotfier.message;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Properties;
 
 import javax.inject.Named;
@@ -11,11 +13,15 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.rochlitz.hbci.tests.web.GVBase;
+import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
+
 @Named("EMailer")
 public class EMailer {
 	
 	
-	public static void mail(String usage, String email) {
+	public static void mail(String usage, NotifierDTO not) {
+		String email = not.getUser().getEmail();
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
@@ -37,13 +43,18 @@ public class EMailer {
 			message.setFrom(new InternetAddress("from@kontoagent.de"));
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(email));
-			message.setSubject("Kontoagenten-Benachrichtigung");
-			message.setText(" ," +
+			
+			Calendar calStart = new GregorianCalendar();
+	        Calendar calEnd = new GregorianCalendar();
+	        calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
+	        
+			message.setSubject("Kontoagenten Benachrichtigung für den Zeitraum von " + calStart.getTime() + " bis " + calEnd.getTime());
+			message.setText(" Filter\n\n Suchtext: " + not.getFilter().getSearch() + "\n Minimaler Betrag  " + not.getFilter().getMinValue() +"\n Maximaler Betrag:  " +  not.getFilter().getMaxValue() + 
 					"\n\n  "+usage);
  
 			Transport.send(message);
  
-			System.out.println("Mail an "+ email +" versendet.");
+			System.out.println(" ++++++++++++++++++++++++++++ Mail an "+ email +" versendet.");
  
 		} catch (MessagingException e) {
 			throw new RuntimeException(e);

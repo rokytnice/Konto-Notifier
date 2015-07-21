@@ -19,6 +19,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.kapott.hbci.manager.HBCIUtils;
 import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
 import org.rochlitz.hbci.tests.web.MyCallback;
 import org.rochlitz.kontoNotfier.persistence.AllDAO;
@@ -58,10 +59,11 @@ public class KontoService {
 				konto.setUser(user);
 				konto = (KontoDTO) kDAO.persist(konto);//TODO 
 			}
-			
+			HBCIUtils.done();
 			MyCallback mc = new MyCallback(konto);
 			KontoAuszugThreaded t = new KontoAuszugThreaded(mc);
 			t.getAuszug();
+			HBCIUtils.done();//clean up data structure - need to be done for new baking connection
 			
 			
 			// Create an "ok" response

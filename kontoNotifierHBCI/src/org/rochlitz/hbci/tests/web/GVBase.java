@@ -16,7 +16,7 @@ public class GVBase {
 	protected  MyCallback mCallback;
 	protected  Properties props;
 	protected  String fileanme;
-	public static final int DAY_OFFSET = -5; //TODO m,uss -1 sein
+	public static final int DAY_OFFSET = -1; //TODO m,uss -1 sein
 	protected HBCICallbackThreaded cbh;
 	protected HBCIPassport passport;
 	protected HBCIHandler handler;

@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 import javax.inject.Named;
 
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.manager.HBCIUtils;
 import org.rochlitz.hbci.tests.web.MyCallback;
 import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
 import org.rochlitz.kontoNotfier.message.EMailer;
@@ -28,7 +29,8 @@ public class NotfierCallableTask implements Callable<Boolean> {
 			// logger.info("Sleeping...");
 			// Thread.sleep(5000);
 			// logger.info("Finished	sleeping!");
-
+			
+			HBCIUtils.done();
 			MyCallback mc = new MyCallback(not.getKonto());
 			
 			System.out.println(" +++++++++++++++++++  callable task user " + not.getUser().getEmail()  + " - " +not.getUser().getId() + "  konto : "  + not.getKonto().getKtonr()  );
@@ -70,7 +72,7 @@ public class NotfierCallableTask implements Callable<Boolean> {
 				}
 				
 				
-				EMailer.mail(message.toString(), not.getUser().getEmail());
+				EMailer.mail(message.toString(), not);
 				
 				boolean compaerRes = d.end.timestamp.before(new Date() ); //is day before today
 				str.isEmpty();
@@ -80,6 +82,8 @@ public class NotfierCallableTask implements Callable<Boolean> {
 			System.out.println("process task for Not id " + not.getId()
 					+ "   filter - " + not.getFilter().getSearch());
 			
+			
+			HBCIUtils.done();//clean up data structure - need to be done for new baking connection
 			// logger.info("process task for Not id " + not.getId());
 			// TODO hbci execute
 			// TODO JMS , email
