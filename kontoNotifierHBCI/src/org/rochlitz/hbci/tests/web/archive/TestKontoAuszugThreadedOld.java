@@ -19,6 +19,7 @@ import org.kapott.hbci.status.HBCIExecStatus;
 import org.kapott.hbci.structures.Konto;
 import org.rochlitz.hbci.base.BasisApp;
 import org.rochlitz.hbci.tests.web.MyCallback;
+import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 public class TestKontoAuszugThreadedOld extends BasisApp
 {
@@ -36,6 +37,7 @@ public class TestKontoAuszugThreadedOld extends BasisApp
         props.setProperty("log.filter", "0");
         
 
+        
 		MyCallback mCallback = new MyCallback();
 		mCallback.setPassphrase("1");
 

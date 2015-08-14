@@ -76,8 +76,8 @@ public class KontoAuszugThreaded extends GVBase
 
 	public static void main(String[] args)
     {
-		MyCallback mc = new MyCallback();
-		 new KontoAuszugThreaded(mc).getAuszug();
+//		MyCallback mc = new MyCallback();
+//		 new KontoAuszugThreaded(mc).getAuszug();
     }
    
 }

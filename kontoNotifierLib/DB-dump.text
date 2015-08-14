@@ -1,0 +1,57 @@
+mysql> show tables;
++---------------------------+
+| Tables_in_kontoNotifierDB |
++---------------------------+
+| FILTER                    |
+| KONTO                     |
+| USER                      |
+| hibernate_sequence        |
++---------------------------+
+4 rows in set (0.00 sec)
+
+mysql> show columns from FILTER;
++-------------------+--------------+------+-----+---------+-------+
+| Field             | Type         | Null | Key | Default | Extra |
++-------------------+--------------+------+-----+---------+-------+
+| FILTER_ID         | int(11)      | NO   | PRI | NULL    |       |
+| ENABLED           | bit(1)       | YES  |     | NULL    |       |
+| LAST_EXEC         | datetime     | YES  |     | NULL    |       |
+| MAX               | int(11)      | YES  |     | NULL    |       |
+| MIN               | int(11)      | YES  |     | NULL    |       |
+| NOTIFY_EMAIL      | bit(1)       | YES  |     | NULL    |       |
+| NOTIFY_PUSH       | bit(1)       | YES  |     | NULL    |       |
+| OPERATOR_AND      | bit(1)       | YES  |     | NULL    |       |
+| OPERATOR_OR       | bit(1)       | YES  |     | NULL    |       |
+| SEARCH            | varchar(255) | YES  |     | NULL    |       |
+| SEARCH_AUFTRAGG   | bit(1)       | YES  |     | NULL    |       |
+| SEARCH_BUCHUNGTXT | bit(1)       | YES  |     | NULL    |       |
+| KONTO_ID          | bigint(20)   | YES  | MUL | NULL    |       |
++-------------------+--------------+------+-----+---------+-------+
+13 rows in set (0.00 sec)
+
+mysql> 
+mysql> show columns from KONTO;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| KONTO_ID   | bigint(20)   | NO   | PRI | NULL    |       |
+| ACCOUNT    | varchar(255) | YES  |     | NULL    |       |
+| BIC        | varchar(255) | YES  |     | NULL    |       |
+| BLZ        | int(11)      | YES  |     | NULL    |       |
+| IBAN       | varchar(255) | YES  |     | NULL    |       |
+| KONTO_NR   | int(11)      | YES  |     | NULL    |       |
+| PASSWORD   | varchar(255) | YES  |     | NULL    |       |
+| FK_USER_ID | bigint(20)   | YES  | MUL | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> show columns from USER;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| USER_ID  | bigint(20)   | NO   | PRI | NULL    |       |
+| EMAIL    | varchar(255) | YES  |     | NULL    |       |
+| PASSWORD | varchar(255) | YES  |     | NULL    |       |
+| USERNAME | varchar(255) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+4 rows in set (0.00 sec)

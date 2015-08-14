@@ -11,6 +11,7 @@ public class TODO {
 	
 	//TODO activate findbug pmd, checkstyle ..
 	//TODO logging
+		//für jede app ein file 
 	//TODO bean validation
 	//TODO js validation
 	//TODO oauth

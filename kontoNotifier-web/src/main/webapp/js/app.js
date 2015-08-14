@@ -32,27 +32,7 @@ function updateNotifiersTable() {
 
 
 
-function updateKontenTable() {
-    // Display the loader widget
-    $.mobile.loading("show");
 
-    $.ajax({
-        url: "rest/notifier",
-        cache: false,
-        success: function(data) {
-            $( "#kontos" ).empty().append(buildNotifiersRows(data));
-            //$( "#kontos-table" ).table( "refresh" ); //TODO dosnt work
-        },
-        error: function(error) {
-            console.log("error updating table -" + error.status);
-        },
-        complete: function() {
-            // Hide the loader widget
-            $.mobile.loading("hide");
-            
-        }
-    });
-}
 
 /* Builds the updated table for the member list */
 function buildNotifiersRows(data) {
@@ -123,10 +103,10 @@ function getNotifiers() {
         url: "rest/notifier",
         cache: false,
         success: function(data) {
-           
+        	console.log(" ------------ -" + data);
               $( "#nots" ).append(buildNotsRows(data));
               $( "#nots-table" ).table( "refresh" );
-            
+            return data;
         },
         error: function(error) {
             //console.log("error updating table -" + error.status);
@@ -168,7 +148,7 @@ function saveKonto(data) {
 
             $('#konto-formMsgs').append($('<span class="success"> Kontodaten gespeichert.</span>'));
             
-            updateKontenTable();
+            updatekontosTable();
         },
         error: function(error) {
             if ((error.status == 409) || (error.status == 400)) {
@@ -251,6 +231,12 @@ function sendToken(data) {
         data: JSON.stringify(data),
         success: function(data) {
         	console.log(" id_token sent");
+            console.log("user name " + name);
+            $( "#username1" ).empty().append(data.email);
+            $( "#username2" ).empty().append(data.email);
+            $( "#username3" ).empty().append(data.email);
+            $( "#username4" ).empty().append(data.email);
+            $( "#username5" ).empty().append(data.email);
         },
         error: function(error) {
             if ((error.status == 409) || (error.status == 400)) {
@@ -323,7 +309,72 @@ function onSignIn(googleUser) {
          
   sendToken( data );
 //  document.getElementById("footer").show();
-
   
 };
+
+function deleteKonto(id){
+	  console.log("del konto id: " + id);
+	  $.ajax({
+	        url: 'rest/konto/deletekonto/'+id,
+	        contentType: "application/json",
+	        dataType: "json",
+	        type: "GET",
+	        data: id,
+	        success: function() {
+	        	
+	        },
+	        error: function(error) {
+	            if ((error.status == 409) || (error.status == 400)) {
+	                //console.log("Validation error registering user!");
+
+	                var errorMsg = $.parseJSON(error.responseText);
+
+	                $.each(errorMsg, function(index, val) {
+	                    $('<span class="invalid">' + val + '</span>').insertAfter($('#' + index));
+	                });
+	            } else {
+	                //console.log("error - unknown server issue");
+	                $('#kontos-formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+	            }
+	        },
+	        complete: function() {
+	            // Hide the loader widget
+	            $.mobile.loading("hide");
+	            updateNotifiersTable();
+	        }
+	    });
+}
+
+
+function deleteFilter(id){
+	  console.log("del filter id: " + id);
+	  $.ajax({
+	        url: 'rest/notifier/deletefilter/'+id,
+	        contentType: "application/json",
+	        dataType: "json",
+	        type: "GET",
+	        data: id,
+	        success: function() {
+	        	updateNotifiersTable();
+	        },
+	        error: function(error) {
+	            if ((error.status == 409) || (error.status == 400)) {
+	                //console.log("Validation error registering user!");
+
+	                var errorMsg = $.parseJSON(error.responseText);
+
+	                $.each(errorMsg, function(index, val) {
+	                    $('<span class="invalid">' + val + '</span>').insertAfter($('#' + index));
+	                });
+	            } else {
+	                //console.log("error - unknown server issue");
+	                $('#kontos-formMsgs').append($('<span class="invalid">Unknown server error</span>'));
+	            }
+	        },
+	        complete: function() {
+	            // Hide the loader widget
+	            $.mobile.loading("hide");
+	        }
+	    });
+}
 

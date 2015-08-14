@@ -55,8 +55,8 @@ public class TestUmsatzAbrufenThreaded extends GVBase{
 
 	
 	public static void main(String[] args) {
-		MyCallback mc = new MyCallback();
-		TestUmsatzAbrufenThreaded t = new TestUmsatzAbrufenThreaded(mc);
-		t.getUmsaetze();
+//		MyCallback mc = new MyCallback();
+//		TestUmsatzAbrufenThreaded t = new TestUmsatzAbrufenThreaded(mc);
+//		t.getUmsaetze();
 	}
 }

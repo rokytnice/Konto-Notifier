@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="kontoNotifierHBCI">
-        <wb-resource deploy-path="/" source-path="/ejbModule" tag="defaultRootSource"/>
         <wb-resource deploy-path="/" source-path="/src"/>
         <property name="java-output-path" value="/kontoNotifierHBCI/target/classes"/>
-        <property name="ClientProject" value="kontoNotifierClient"/>
-        <property name="ClientJARURI" value="kontoNotifierClient.jar"/>
     </wb-module>
 </project-modules>

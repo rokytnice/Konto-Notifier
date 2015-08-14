@@ -110,6 +110,7 @@
          saveKonto(dataKonto);
      });
 
+    
      
  });
 
@@ -125,7 +126,7 @@
 			<article id="intro-art" data-role="page" data-title="Kontoagent Home">
 				<!-- Header -->
 				<div data-role="header" class="header">
-						<h3>Kontoagenten</h3>
+						<h3>Kontoagenten -  <p id="username1">not loged in</p></h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -144,7 +145,7 @@
 				data-title="Notifier hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Kontoagent</h3>
+					<h3>Kontoagent-  <p id="username2">not loged in</p></h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -171,7 +172,7 @@
 				data-title="Kontoagent hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Kontoagenten</h3>
+					<h3>Kontoagenten-  <p id="username3">not loged in</p></h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -198,7 +199,7 @@
 			<article id="notifiers-art" data-role="page" data-title="Liste von Agenten">
                 <!-- Header -->
                 <div data-role="header" class="header" data-position="fixed">
-                    <h3>Alle Agenten</h3>
+                    <h3>Alle Agenten-  <p id="username4">not loged in</p></h3>
                 </div>
                 <!-- /Header -->
 
@@ -212,6 +213,7 @@
                                     <th data-priority="2">Suchtext</th>
                                     <th data-priority="3">Min €</th>
                                     <th data-priority="4">Max € #</th>
+                                     <th data-priority="5"></th>
                                 </tr>
                             </thead>
                             <tbody id="notifiers">
@@ -234,10 +236,10 @@
             </article>
 
 
-			<article id="kontos-art" data-role="page" data-title="List Kontos">
+			<article id="kontos-art" data-role="page" data-title="Liste Konten">
                 <!-- Header -->
                 <div data-role="header" class="header" data-position="fixed">
-                    <h3>Alle Kontoverbindungen</h3>
+                    <h3>Alle Kontoverbindungen-  <p id="username5">not loged in</p></h3>
                 </div>
                 <!-- /Header -->
 
@@ -250,13 +252,15 @@
                                     <th data-priority="1">Kontonummer</th>
                                     <th data-priority="2">BLZ</th>
                                     <th data-priority="3">Account</th>
+                                    <th data-priority="4"></th>
                                 </tr>
                             </thead>
                             <tbody id="kontos">
                             
                             </tbody>
                         </table>
-                        <div class="member-foot">
+                        <div class="kontos-foot">
+                        <div id="kontos-formMsgs"></div>
                         </div>
                     </div>
                 </div>
@@ -280,16 +284,17 @@
 			<!-- /Footer -->
 
 		</section>
-
 	</div>
 
 	<script type="text/template" id="notifiers-tmpl">
         <% _.each(data, function(row) { %>
         <tr>
             <th><%=row.konto.ktonr%></td>
-            <td><%=row.filter.search%></td>
-			<td><%=row.filter.minValue%></td>
-			<td><%=row.filter.maxValue%></td>
+            <td><%=row.search%></td>
+			<td><%=row.minValue%></td>
+			<td><%=row.maxValue%></td>
+            <td><button onclick="deleteFilter(<%=row.id%>)" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all"></button></td>
+        
         </tr>
         <% }); %>
     </script>
@@ -297,8 +302,9 @@
         <% _.each(data, function(row) { %>
         <tr>
             <th><%=row.ktonr%></td>
-            <td><%=row.blz%></td>
+            <td><%=row.blz%></td> 
 			<td><%=row.account%></td>
+			<td><button onclick="deleteKonto(<%=row.id%>)" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all"></button></td>
         </tr>
         <% }); %>
     </script>

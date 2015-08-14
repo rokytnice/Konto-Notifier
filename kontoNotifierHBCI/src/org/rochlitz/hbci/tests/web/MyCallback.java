@@ -4,6 +4,7 @@ import org.kapott.hbci.callback.HBCICallbackConsole;
 import org.kapott.hbci.passport.HBCIPassport;
 import org.kapott.hbci.passport.INILetter;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
+import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 //TODO AR change passwort
 //TODO transactions
@@ -29,23 +30,26 @@ public class MyCallback extends HBCICallbackConsole {
 	private String userID ;
 	private String kontoID ;
 	
-	public MyCallback(KontoDTO not) {
+	public MyCallback(KontoDTO not, UserDTO user)  {
 		super();
 		
 		this.pin = not.getPassword();
 		this.customerId = not.getAccount();
 		this.kontoNr = String.valueOf(not.getKtonr())+kontoNrFill;
 		this.kontoID = String.valueOf(not.getId());
-		this.userID = String.valueOf(not.getUser().getId());
+		this.userID = String.valueOf(user.getId());
 		this.blz = String.valueOf(not.getBlz());
 
 	}
 	
+	
+
 	public MyCallback() {
-		super();
+		// TODO Auto-generated constructor stub
 	}
-	
-	
+
+
+
 	public void callback(HBCIPassport passport, int reason, String msg,
 			int datatype, StringBuffer retData) {
 

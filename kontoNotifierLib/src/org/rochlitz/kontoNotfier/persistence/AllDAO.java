@@ -59,11 +59,11 @@ public class AllDAO {
 		return result;
 	}
 
-	public List<NotifierDTO> getNotifierOfUser(UserDTO user) throws Exception {
-		Query q = em.createQuery("SELECT e FROM NotifierDTO e WHERE e.user.id = :userid");
-		q.setParameter("userid", user.getId());
+	public List<FilterDTO> getFilterOfUser(KontoDTO konto) throws Exception {
+		Query q = em.createQuery("SELECT e FROM FilterDTO e WHERE konto.id = :id");
+		q.setParameter("id", konto.getId());
 		@SuppressWarnings("unchecked")
-		List<NotifierDTO> result =  q.getResultList();
+		List<FilterDTO> result =  q.getResultList();
 		return result;
 	}
 
@@ -75,5 +75,27 @@ public class AllDAO {
 		return result;
 	}
 
+	//TODO delete also file
+	public void deleteNotfifier(long kontoid) {
+		Query q = em.createQuery("SELECT e FROM FilterDTO e WHERE e.konto.id = :id");
+		q.setParameter("id", kontoid);
+		List<FilterDTO> result =  q.getResultList();
+		
+		if(result.size()>0){
+			em.remove(result.get(0));
+		}
+		KontoDTO konto = em.getReference(KontoDTO.class, kontoid);
+		 //TODO validate is konto from current user??
+		em.remove(konto);
+		em.flush();
+	}
+
+	public void deleteFilter(Integer filterId) {
+
+		FilterDTO filter = em.getReference(FilterDTO.class, filterId);
+		 //TODO validate is konto from current user??
+		em.remove(filter);
+		em.flush();
+	}	
 	
 }

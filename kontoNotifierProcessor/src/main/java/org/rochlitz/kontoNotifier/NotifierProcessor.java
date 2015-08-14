@@ -14,7 +14,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.rochlitz.kontoNotfier.persistence.CdiDao;
-import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
+import org.rochlitz.kontoNotfier.persistence.FilterDTO;
+import org.rochlitz.kontoNotfier.persistence.KontoDTO;
+import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 /**
  * @author aroc
@@ -43,17 +45,29 @@ public class NotifierProcessor {
 		try {
 
 			@SuppressWarnings("unchecked")
-			List<NotifierDTO> nots = dao.getAll(new NotifierDTO());
+			List<UserDTO> users = dao.getAll(new UserDTO());
 			Collection<NotfierCallableTask> notTasks = new ArrayList<NotfierCallableTask>();
 
-			Iterator<NotifierDTO> iter = nots.iterator();
+			Iterator<UserDTO> iter = users.iterator();
 			while(iter.hasNext()){
-				notTasks.add( new NotfierCallableTask(  iter.next() )  );
-				NotfierCallableTask n = new NotfierCallableTask(  iter.next() );
-				n.call();
+				UserDTO user = iter.next();
+				List<KontoDTO> konten = dao.getKontenOfUser(user);
+				Iterator<KontoDTO> iter1 = konten.iterator();
+				while(iter1.hasNext()){
+					KontoDTO konto = iter1.next();
+					
+					Iterator<FilterDTO> iter2 = dao.getFilterOfUser(konto).iterator();
+//					notTasks.add( new NotfierCallableTask( iter2.next()  )  );
+					FilterDTO filter = iter2.next();
+					
+					
+					NotfierCallableTask n = new NotfierCallableTask( filter , user , konto);
+					
+					n.call();
+				}
 			}
 			
-			notTasks.addAll( notTasks);
+//			notTasks.addAll( notTasks);
 
 			//TODO clean up code  --- beacause disabled threading - ist schon gelöst in HBCICallbackThreaded
 //		  executorService.invokeAll(  notTasks);

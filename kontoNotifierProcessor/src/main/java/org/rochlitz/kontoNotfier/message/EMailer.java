@@ -14,14 +14,15 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.rochlitz.hbci.tests.web.GVBase;
-import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
+import org.rochlitz.kontoNotfier.persistence.FilterDTO;
+import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 @Named("EMailer")
 public class EMailer {
 	
 	
-	public static void mail(String usage, NotifierDTO not) {
-		String email = not.getUser().getEmail();
+	public static void mail(String usage, FilterDTO filter, UserDTO user) {
+		String email = user.getEmail();
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
 		props.put("mail.smtp.socketFactory.port", "465");
@@ -49,7 +50,7 @@ public class EMailer {
 	        calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
 	        
 			message.setSubject("Kontoagenten Benachrichtigung für den Zeitraum von " + calStart.getTime() + " bis " + calEnd.getTime());
-			message.setText(" Filter\n\n Suchtext: " + not.getFilter().getSearch() + "\n Minimaler Betrag  " + not.getFilter().getMinValue() +"\n Maximaler Betrag:  " +  not.getFilter().getMaxValue() + 
+			message.setText(" Filter\n\n Suchtext: " + filter.getSearch() + "\n Minimaler Betrag  " + filter.getMinValue() +"\n Maximaler Betrag:  " +  filter.getMaxValue() + 
 					"\n\n  "+usage);
  
 			Transport.send(message);

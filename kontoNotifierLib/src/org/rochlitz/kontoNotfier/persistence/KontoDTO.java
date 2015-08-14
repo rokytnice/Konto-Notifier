@@ -7,88 +7,93 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="KONTO")
-public class KontoDTO implements IDTO  {
+@Table(name = "KONTO")
+public class KontoDTO implements IDTO {
 
 	public KontoDTO() {
 		super();
 	}
 
+	// public KontoDTO(String fieldRest) {
+	// super(fieldRest);
+	// }
 
-//	public KontoDTO(String fieldRest) {
-//		super(fieldRest);
-//	}
-	
 	public KontoDTO(String fieldRest) {
 		super();
-		System.out.println(" ************** rest request " + fieldRest ); //
+		System.out.println(" ************** rest request " + fieldRest); //
 		fieldRest = fieldRest.replaceAll("\"", "");
 		String[] fields = fieldRest.split("&");
-		
-		for(String property : fields){
+
+		for (String property : fields) {
 			String[] keyValue = property.split("=");
 			try {
-				if(keyValue.length<=1){//no value for key
+				if (keyValue.length <= 1) {// no value for key
 					continue;
 				}
 				String key = keyValue[0];
 				String value = keyValue[1];
-				
+
 				Field field = this.getClass().getDeclaredField(key);
 				field.setAccessible(true);
 				Class<?> typeOF = field.getType();
-				 
-				if(typeOF.equals(Integer.class)){
-					 field.set(this,Integer.parseInt( value ));
-				 }else if(typeOF.isPrimitive()){//long sind die einzigsten primitiven die bisher verwendet werden
-					 field.set(this,Integer.parseInt( value ));
-				 }else{
-					 field.set(this,keyValue[1]);
-				 }
-			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+
+				if (typeOF.equals(Integer.class)) {
+					field.set(this, Integer.parseInt(value));
+				} else if (typeOF.isPrimitive()) {// long sind die einzigsten
+													// primitiven die bisher
+													// verwendet werden
+					field.set(this, Integer.parseInt(value));
+				} else {
+					field.set(this, keyValue[1]);
+				}
+			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException
+					| SecurityException | IllegalArgumentException
+					| IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name = "KONTO_ID")
-	private long Id;// PK
-	
+	private long id;// PK
+
 	@Column(name = "BLZ")
 	private Integer blz;// bankleizahl
-	
+
 	@Column(name = "KONTO_NR")
 	private Integer ktonr;// kontonummer
-	
+
 	@Column(name = "BIC")
 	private String bic;// later
-	
+
 	@Column(name = "IBAN")
 	private String iban;// later
-	
+
 	@Column(name = "ACCOUNT")
 	private String account; // zugansgnummer
-	
+
 	@Column(name = "PASSWORD")
 	private String password;// password zum account / zugangsnummer
-	
-	@OneToOne
+
+	@ManyToOne
 	@JoinColumn(name = "FK_USER_ID")
 	private UserDTO user;
-	
-	
+
+//	@OneToMany(mappedBy="konto",fetch = FetchType.LAZY)
+//	private List<FilterDTO> filters = new ArrayList<FilterDTO>();
+
 	private static final long serialVersionUID = 1L;
 
-	//TODO FK userID
-	//TODO password speichern j/n
-	
+	// TODO FK userID
+	// TODO password speichern j/n
+
 	public Integer getBlz() {
 		return blz;
 	}
@@ -146,13 +151,19 @@ public class KontoDTO implements IDTO  {
 	}
 
 	public long getId() {
-		return Id;
+		return this.id;
 	}
 
 	public void setId(long id) {
-		Id = id;
+		this.id = id;
 	}
 
- 
+//	public List<FilterDTO> getFilters() {
+//		return filters;
+//	}
+//
+//	public void setFilters(List<FilterDTO> filters) {
+//		this.filters = filters;
+//	}
 
 }

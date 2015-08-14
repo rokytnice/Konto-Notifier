@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-workspace name="Projects" soapui-version="4.0.1.1" xmlns:con="http://eviware.com/soapui/config">
+  <con:settings/>
+  <con:project name="HTI">/home/aroc/samba/VW-CarNet/SOAPUI/HTI-soapui-project-20140423.xml</con:project>
+</con:soapui-workspace>

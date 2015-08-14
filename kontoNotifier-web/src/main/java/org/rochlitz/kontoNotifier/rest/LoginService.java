@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.ws.rs.Consumes;
@@ -17,7 +16,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 
 import org.rochlitz.kontoNotfier.persistence.AllDAO;
@@ -50,12 +48,9 @@ public class LoginService<JsonFactory> {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response catchtoken(TokenDTO id_token, @Context HttpServletRequest request ) {
 
-		Response.ResponseBuilder builder = null;
-		UserDTO user;
+		UserDTO user=null;
 		Payload payload;
 		String subject;
-		builder = Response.ok();
-		Response result = builder.build();
 		
 		try {
 			JsonFactory mJFactory = (JsonFactory) new GsonFactory();
@@ -87,13 +82,10 @@ public class LoginService<JsonFactory> {
 				
 				Authentication authServ = new Authentication();
 				List<UserDTO> users = kDAO.getUserByMail( payload.getEmail() );
-				if(users.size() == 1){//user exist
+				if(users.size() >= 1){//user exist
 					user = users.get(0);
 					authServ.setUserToSession(request, user);
-				}else if(users.size() > 1){
-					System.out.println("more than 1 user found."); //TODO this is strange
-					
-				}else if(users.size() < 1 ){
+				}else{
 					user = new UserDTO( payload.getEmail() );
 					kDAO.persist( user );
 					authServ.setUserToSession(request, user);
@@ -120,9 +112,7 @@ public class LoginService<JsonFactory> {
 			// builder =
 			// Response.status(Response.Status.BAD_REQUEST).entity(responseObj);
 		}
-		return result;
+		return Response.ok(user).build();
 	}
-
-	
 
 }

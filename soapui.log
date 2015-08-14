@@ -1,0 +1,4 @@
+19:50:38,165 INFO [com.eviware.soapui.impl.WorkspaceImpl] Loading workspace from [/home/aroc/workspace/kontoNotifier/default-soapui-workspace.xml]
+19:50:38,849 INFO [com.eviware.soapui.impl.wsdl.WsdlProject] Loaded project from [file:/home/aroc/samba/VW-CarNet/SOAPUI/HTI-soapui-project-20140423.xml]
+09:19:04,865 INFO [com.eviware.soapui.impl.wsdl.WsdlProject] Saved project [HTI] to [/home/aroc/samba/VW-CarNet/SOAPUI/HTI-soapui-project-20140423.xml - 3596304 bytes
+09:19:04,940 INFO [com.eviware.soapui.impl.WorkspaceImpl] Saved workspace to [/home/aroc/workspace/kontoNotifier/default-soapui-workspace.xml]

@@ -1,10 +1,14 @@
 package org.rochlitz.kontoNotifier.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
@@ -12,27 +16,29 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
-import org.rochlitz.hbci.tests.web.MyCallback;
 import org.rochlitz.kontoNotfier.persistence.AllDAO;
 import org.rochlitz.kontoNotfier.persistence.FilterDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
-import org.rochlitz.kontoNotfier.persistence.NotifierDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
 import org.rochlitz.kontoNotifier.security.Authentication;
 
 //   http://your_domain:port/display-name/url-pattern/path_from_rest_class 
 //   http://localhost:8080/kontoNotifier-web/rest/konto
 @Path("/notifier")
-public class NotifierService {
+@Stateless
+public class FilterService {
 
 	@Inject
 	AllDAO kDAO;
+	@Inject
+	Authentication authServ;
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -44,21 +50,11 @@ public class NotifierService {
 
 		try {
 
-			Authentication authServ = new Authentication();
 			UserDTO user = authServ.getUserFromSession(request);
-//			authServ.setSessionLoginStatus(user, result);
-
-			KontoDTO kto = (KontoDTO) kDAO.find(filter.getKontoSelection(),
+			KontoDTO konto = (KontoDTO) kDAO.find(filter.getKontoSelection(),
 					new KontoDTO());
-
-			NotifierDTO not = new NotifierDTO();
-			not.setKonto(kto);
-			not.setFilter(filter);
-			not.setUser(user);
-
+			filter.setKonto(konto);
 			kDAO.persist(filter);
-			kDAO.persist(not);
-			
 			
 			// Create an "ok" response
 			result = Response.ok(filter).build();
@@ -83,20 +79,45 @@ public class NotifierService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<NotifierDTO> getAll(@Context HttpServletRequest request) {
+	public Response getAll(@Context HttpServletRequest request) throws AuthenticationException, javax.security.sasl.AuthenticationException {
 
-		Authentication authServ = new Authentication();
 		UserDTO user = authServ.getUserFromSession(request);
-		List<NotifierDTO> list = null;
+		List<FilterDTO> filters = new ArrayList<FilterDTO>();
 		try {
-			list = kDAO.getNotifierOfUser(user); 
+			Iterator<KontoDTO> iter = kDAO.getKontenOfUser(user).iterator();
+			while(iter.hasNext()){
+				KontoDTO konto = iter.next();
+				filters.addAll( kDAO.getFilterOfUser(konto) ); 
+			}
 													// session
+		} catch (Exception e) {
+			// TODO db exception
+			e.printStackTrace();
+		}
+		 GenericEntity<List<FilterDTO>> list = new GenericEntity<List<FilterDTO>>(filters) {
+	        };
+	        
+	       Response result = Response.ok(list).build();
+	    		 
+		return result;
+
+	}
+	
+    @GET
+    @Path("/deletefilter/{id}")
+    public Response deleteFilter(@PathParam("id") String id ,@Context HttpServletRequest request ) throws AuthenticationException, javax.security.sasl.AuthenticationException {
+    	authServ.getUserFromSession(request);
+    	Response.ResponseBuilder builder = Response.ok();
+		Response result = builder.build();
+		try {
+			kDAO.deleteFilter(Integer.parseInt(id) ); 
+			builder = Response.ok();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			builder = Response.serverError();
 		}
-
-		return list;
-	}
+		return result;
+    }
 
 }
