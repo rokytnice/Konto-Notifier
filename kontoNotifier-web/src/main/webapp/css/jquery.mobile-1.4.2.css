@@ -4279,14 +4279,14 @@ html .ui-popup .ui-field-contain > label + .ui-flipswitch {
 .ui-table {
 	border: 0;
 	border-collapse: collapse;
-	padding: 0;
+	padding: 1;
 	width: 100%;
 }
 .ui-table th,
 .ui-table td {
 	line-height: 1.5em;
 	text-align: left;
-	padding: .4em .5em;
+	padding: 1;
 	vertical-align:top;
 }
 .ui-table th .ui-btn,

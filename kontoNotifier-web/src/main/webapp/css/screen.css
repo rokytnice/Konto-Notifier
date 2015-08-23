@@ -136,6 +136,7 @@ div[data-role="navbar"] a.ui-link.ui-btn-active:after {
     .app-responsive .ui-block-e {
         width: 49.95%;
         float:left;
+         padding: 1;
     }
 
     /* Show the table header rows and set all cells to display: table-cell */
@@ -150,6 +151,7 @@ div[data-role="navbar"] a.ui-link.ui-btn-active:after {
         white-space: pre-wrap;
         word-break: break-all;
         word-break: break-word;
+         padding: 1;
     }
     /* Hide the labels in each cell */
     .app-responsive td .ui-table-cell-label,

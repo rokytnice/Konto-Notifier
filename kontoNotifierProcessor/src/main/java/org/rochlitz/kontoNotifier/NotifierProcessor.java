@@ -52,17 +52,18 @@ public class NotifierProcessor {
 			while(iter.hasNext()){
 				UserDTO user = iter.next();
 				List<KontoDTO> konten = dao.getKontenOfUser(user);
+				if(konten.isEmpty())
+					continue;
 				Iterator<KontoDTO> iter1 = konten.iterator();
 				while(iter1.hasNext()){
 					KontoDTO konto = iter1.next();
 					
-					Iterator<FilterDTO> iter2 = dao.getFilterOfUser(konto).iterator();
-//					notTasks.add( new NotfierCallableTask( iter2.next()  )  );
+					List<FilterDTO> filterOfUser = dao.getFilterOfUser(konto);
+					if(filterOfUser.isEmpty())
+						continue;
+					Iterator<FilterDTO> iter2 = filterOfUser.iterator();
 					FilterDTO filter = iter2.next();
-					
-					
 					NotfierCallableTask n = new NotfierCallableTask( filter , user , konto);
-					
 					n.call();
 				}
 			}

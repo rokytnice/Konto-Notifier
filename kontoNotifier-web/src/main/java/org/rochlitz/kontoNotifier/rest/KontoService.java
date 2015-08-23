@@ -48,10 +48,10 @@ public class KontoService {
 
 		Response.ResponseBuilder builder = Response.ok();
 		Response result = builder.build();
-
+		UserDTO user = null;
 		try {
 
-			UserDTO user = authServ.getUserFromSession(request);
+			user = authServ.getUserFromSession(request);
 
 //			List<KontoDTO> konten = kDAO.getKontenOfUser(user);
 			konto.setUser(user);
@@ -79,6 +79,14 @@ public class KontoService {
 			// builder =
 			// Response.status(Response.Status.CONFLICT).entity(responseObj);
 			builder = Response.serverError();
+			
+		} catch (AuthenticationException ae) {
+				// Handle the unique constrain violation
+				Map<String, String> responseObj = new HashMap<String, String>();
+				responseObj.put("email", "Email taken");
+				// builder =
+				// Response.status(Response.Status.CONFLICT).entity(responseObj);
+				return  Response.status(Response.Status.UNAUTHORIZED).build();
 		} catch (Exception e) {
 			// Handle generic exceptions
 			Map<String, String> responseObj = new HashMap<String, String>();

@@ -20,6 +20,7 @@ function updateNotifiersTable() {
             $( "#notifiers-table" ).table( "refresh" );
         },
         error: function(error) {
+        	reLoginOnTimedOutSession(error);
             console.log("error updating table -" + error.status);
         },
         complete: function() {
@@ -53,6 +54,7 @@ function updatekontosTable() {
             $( "#kontos-table" ).table( "refresh" );
         },
         error: function(error) {
+        	reLoginOnTimedOutSession(error);
             console.log("error updating table -" + error.status);
         },
         complete: function() {
@@ -87,6 +89,7 @@ function getKontos() {
             return data;
         },
         error: function(error) {
+        	reLoginOnTimedOutSession(error);
             console.log("error updating table -" + error.status);
         },
         complete: function() {
@@ -109,6 +112,7 @@ function getNotifiers() {
             return data;
         },
         error: function(error) {
+        	reLoginOnTimedOutSession(error);
             //console.log("error updating table -" + error.status);
         },
         complete: function() {
@@ -124,6 +128,12 @@ function buildNotsRows(data) {
 	console.log(" ------------ -" + data);
 	res = _.template( $( "#nots-tmpl" ).html(), {"data": data});
     return res;
+}
+
+function reLoginOnTimedOutSession(error){
+	if (error.status == 401 ) {
+		 onSignIn(gUser);
+	}
 }
  
 function saveKonto(data) {
@@ -151,6 +161,7 @@ function saveKonto(data) {
             updatekontosTable();
         },
         error: function(error) {
+        	reLoginOnTimedOutSession(error);
             if ((error.status == 409) || (error.status == 400)) {
                 //console.log("Validation error registering user!");
 
@@ -198,6 +209,7 @@ function saveNotifier(data) {
             updateNotifiersTable();
         },
         error: function(error) {
+        	reLoginOnTimedOutSession(error);
             if ((error.status == 409) || (error.status == 400)) {
                 //console.log("Validation error registering user!");
 
@@ -239,6 +251,7 @@ function sendToken(data) {
             $( "#username5" ).empty().append(data.email);
         },
         error: function(error) {
+        	reLoginOnTimedOutSession(error);
             if ((error.status == 409) || (error.status == 400)) {
                 //console.log("Validation error registering user!");
 
@@ -287,8 +300,10 @@ function redirect(path)
 }
 
 var profile;
-
+var gUser;
 function onSignIn(googleUser) {
+	
+	gUser = googleUser;
   // Useful data for your client-side scripts:
   profile = googleUser.getBasicProfile();
   console.log("ID: " + profile.getId()); // Don't send this directly to your server!
@@ -324,6 +339,7 @@ function deleteKonto(id){
 	        	
 	        },
 	        error: function(error) {
+	        	reLoginOnTimedOutSession(error);
 	            if ((error.status == 409) || (error.status == 400)) {
 	                //console.log("Validation error registering user!");
 
@@ -358,6 +374,7 @@ function deleteFilter(id){
 	        	updateNotifiersTable();
 	        },
 	        error: function(error) {
+	        	reLoginOnTimedOutSession(error);
 	            if ((error.status == 409) || (error.status == 400)) {
 	                //console.log("Validation error registering user!");
 

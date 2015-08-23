@@ -87,7 +87,7 @@ public class LoginService<JsonFactory> {
 					authServ.setUserToSession(request, user);
 				}else{
 					user = new UserDTO( payload.getEmail() );
-					kDAO.persist( user );
+					user = (UserDTO) kDAO.persist( user );
 					authServ.setUserToSession(request, user);
 				}
 				

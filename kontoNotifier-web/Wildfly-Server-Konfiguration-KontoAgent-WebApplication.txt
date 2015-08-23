@@ -34,3 +34,115 @@ http://kontoagent.ddns.net
 
 ########### remote server eclipse deployment -- http://www.mastertheboss.com/eclipse/jboss-tools/deploy-applications-to-a-remote-wildfly-server-using-eclipse
 sudo perl deamon.pl
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+aroc@127:~$ ssh ar-s
+aroc@ar-s's password: 
+Welcome to Ubuntu 14.04.2 LTS (GNU/Linux 3.13.0-32-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com/
+
+158 packages can be updated.
+81 updates are security updates.
+
+Last login: Fri Aug 21 11:07:17 2015 from 192.168.2.101
+aroc@ar-s:~$ keytool -genkey -alias kontoagent-keystore -keyalg RSA -keystore kontoagent.keystore -validity 10950Keystore-Kennwort eingeben:  
+Keytool-Fehler: java.lang.Exception: Schl��sselpaar wurde nicht generiert. Alias <kontoagent-keystore> ist bereits vorhanden
+aroc@ar-s:~$ keytool 
+Schl��ssel- und Zertifikatsverwaltungstool
+
+Befehle:
+
+ -certreq            Generiert eine Zertifikatanforderung
+ -changealias        ��ndert den Alias eines Eintrags
+ -delete             L��scht einen Eintrag
+ -exportcert         Exportiert ein Zertifikat
+ -genkeypair         Generiert ein Schl��sselpaar
+ -genseckey          Generiert einen Secret Key
+ -gencert            Generiert ein Zertifikat aus einer Zertifikatanforderung
+ -importcert         Importiert ein Zertifikat oder eine Zertifikatskette
+ -importkeystore     Importiert einen oder alle Eintr��ge aus einem anderen Keystore
+ -keypasswd          ��ndert das Schl��sselkennwort eines Eintrags
+ -list               Listet die Eintr��ge in einem Keystore auf
+ -printcert          Druckt den Content eines Zertifikats
+ -printcertreq       Druckt den Content einer Zertifikatanforderung
+ -printcrl           Druckt den Content einer CRL-Datei
+ -storepasswd        ��ndert das Speicherkennwort eines Keystores
+
+"keytool -command_name -help" f��r Verwendung von command_name verwenden
+aroc@ar-s:~$ keytool -list
+Keytool-Fehler: java.lang.Exception: Keystore-Datei ist nicht vorhanden: /home/aroc/.keystore
+aroc@ar-s:~$ keytool -list -keystore kontoagent.keystore 
+Keystore-Kennwort eingeben:  
+
+Keystore-Typ: JKS
+Keystore-Provider: SUN
+
+Keystore enth��lt 1 Eintrag
+
+kontoagent-keystore, 17.06.2015, PrivateKeyEntry, 
+Zertifikat-Fingerprint (SHA1): 96:D8:77:6D:2E:09:FD:2D:43:9C:B8:F3:B5:00:AA:45:C8:52:0E:AE
+
+
+
+
+
+#################################################################################################
+###exportiere zertifikat aus keystore von wildfly für android
+
+aroc@ar-s:~$ keytool -export -alias kontoagent-keystore -keystore kontoagent.keystore  -storepass A7uj89oil -keypass A7uj89oil -file cert-testserver-kontoagent.cer
+Zertifikat in Datei <cert-testserver-kontoagent.cer> gespeichert
+
+##kopieren von server auf entwicklungsrechner
+aroc@ar-s:~$ scp  cert-testserver-kontoagent.cer aroc@192.168.2.101:/home/aroc
+
+###################################################
+keystore bks für android anlegen
+aroc@127:~$ keytool -import -file /home/aroc/workspace/kontoNotifier/cert-testserver-kontoagent.cer -keypass genericPassword -keystore /home/aroc/workspace/kontoNotifier/keystore/selfsignedcertsbks -storetype BKS -storepass A7uj89oil -providerClass org.bouncycastle.jce.provider.BouncyCastleProvider -providerpath /home/aroc/Downloads/bcprov-ext-jdk15on-152.jar -alias kontoagent-keystore
+Picked up JAVA_TOOL_OPTIONS: -javaagent:/usr/share/java/jayatanaag.jar 
+Owner: CN=kontoagent.ddns.net, OU=kontoagent.ddns.net, O=kontoagent.ddns.net, L=berlin, ST=berlin, C=be
+Issuer: CN=kontoagent.ddns.net, OU=kontoagent.ddns.net, O=kontoagent.ddns.net, L=berlin, ST=berlin, C=be
+Serial number: 4acb9ae5
+Valid from: Wed Jun 17 11:38:44 CEST 2015 until: Fri Jun 09 11:38:44 CEST 2045
+Certificate fingerprints:
+	 MD5:  B5:51:A1:99:4E:D1:4F:E1:7B:32:5F:A5:87:3D:57:3F
+	 SHA1: 96:D8:77:6D:2E:09:FD:2D:43:9C:B8:F3:B5:00:AA:45:C8:52:0E:AE
+	 SHA256: 20:30:3F:44:CC:C1:05:22:54:83:11:79:37:87:80:C0:E5:58:50:E0:5A:7C:87:B9:E0:8F:C3:99:50:87:75:37
+	 Signature algorithm name: SHA256withRSA
+	 Version: 3
+
+Extensions: 
+
+#1: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 04 10 2A 32 DB A2 74 34   F2 17 F9 80 5F F3 25 79  ..*2..t4...._.%y
+0010: 9E 36 01 70                                        .6.p
+]
+]
+
+Trust this certificate? [no]:  yes
+Certificate was added to keystore
+
+
+
+
+
+
+
+
+
