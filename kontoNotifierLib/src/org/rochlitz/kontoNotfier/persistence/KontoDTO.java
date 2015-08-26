@@ -2,6 +2,7 @@ package org.rochlitz.kontoNotfier.persistence;
 
 import java.lang.reflect.Field;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -82,7 +83,7 @@ public class KontoDTO implements IDTO {
 	@Column(name = "PASSWORD")
 	private String password;// password zum account / zugangsnummer
 
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name = "FK_USER_ID")
 	private UserDTO user;
 

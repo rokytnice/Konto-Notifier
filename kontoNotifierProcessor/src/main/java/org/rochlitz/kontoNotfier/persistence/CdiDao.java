@@ -8,6 +8,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 //TODO activate findbug pmd, checkstyle ..
@@ -27,13 +28,13 @@ public class CdiDao {
 	private EntityManager em;
 
 	// TODO test hbci data / connection
-	public void persist(IDTO dto) throws Exception {
+	public void persist(IDTO dto) throws PersistenceException {
 		em.persist(dto);
 		em.flush();
 	}
 
 	// TODO genercis?
-	public List getAll(IDTO dto) throws Exception {
+	public List getAll(IDTO dto) throws PersistenceException {
 
 		String dtoName = dto.getClass().getSimpleName();
 
@@ -43,7 +44,7 @@ public class CdiDao {
 
 	}
 
-	public List<Long> getAllIDs(IDTO dto) throws Exception {
+	public List<Long> getAllIDs(IDTO dto) throws PersistenceException {
 
 		String dtoName = dto.getClass().getSimpleName();
 
@@ -60,7 +61,7 @@ public class CdiDao {
 		return res;
 	}
 
-	public List<FilterDTO> getFilterOfUser(KontoDTO konto) throws Exception {
+	public List<FilterDTO> getFilterOfUser(KontoDTO konto) throws PersistenceException {
 		Query q = em
 				.createQuery("SELECT e FROM FilterDTO e WHERE konto.id = :id");
 		q.setParameter("id", konto.getId());
@@ -69,7 +70,7 @@ public class CdiDao {
 		return result;
 	}
 
-	public List<KontoDTO> getKontenOfUser(UserDTO user) throws Exception {
+	public List<KontoDTO> getKontenOfUser(UserDTO user) throws PersistenceException {
 		Query q = em
 				.createQuery("SELECT e FROM KontoDTO e WHERE e.user.id = :userid");
 		q.setParameter("userid", user.getId());

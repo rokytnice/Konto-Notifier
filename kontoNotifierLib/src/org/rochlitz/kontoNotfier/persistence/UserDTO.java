@@ -1,5 +1,7 @@
 package org.rochlitz.kontoNotfier.persistence;
 
+import java.lang.reflect.Field;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,10 +33,56 @@ public class UserDTO  implements IDTO {
 	@Column(name = "PASSWORD")
 	private String password;//TODO check varchar 256???
 		
+	/**
+	 * e.g. if user email is not approved 
+	 */
+	@Column(name = "ACTIVE")
+	private boolean active;
+	
+	
 //	@OneToMany(mappedBy="user",fetch = FetchType.LAZY)
 //	private List<KontoDTO> konten  = new ArrayList<KontoDTO>();
 	
-	public UserDTO(String email2) {
+	public UserDTO(String fieldRest) {
+		super();
+		System.out.println(" ************** rest request " + fieldRest); //
+		fieldRest = fieldRest.replaceAll("\"", "");
+		String[] fields = fieldRest.split("&");
+
+		for (String property : fields) {
+			String[] keyValue = property.split("=");
+			try {
+				if (keyValue.length <= 1) {// no value for key
+					continue;
+				}
+				String key = keyValue[0];
+				String value = keyValue[1];
+				if(key.compareTo("email") == 0){ //email convert to lower case
+					value=value.toLowerCase();
+				}
+				
+				Field field = this.getClass().getDeclaredField(key);
+				field.setAccessible(true);
+				Class<?> typeOF = field.getType();
+
+				if (typeOF.equals(Integer.class)) {
+					field.set(this, Integer.parseInt(value));
+				} else if (typeOF.isPrimitive()) {// long sind die einzigsten
+													// primitiven die bisher
+													// verwendet werden
+					field.set(this, Integer.parseInt(value));
+				} else {
+					field.set(this, keyValue[1]);
+				}
+			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException
+					| SecurityException | IllegalArgumentException
+					| IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	public UserDTO(String email2, boolean justEmail) {
 		email=email2;
 	}
 	public UserDTO() {
@@ -64,6 +112,13 @@ public class UserDTO  implements IDTO {
 	public void setId(long id) {
 		this.id = id;
 	}
+	public boolean isActive() {
+		return active;
+	}
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
 	
 //	public List<KontoDTO> getKonten() {
 //		return konten;

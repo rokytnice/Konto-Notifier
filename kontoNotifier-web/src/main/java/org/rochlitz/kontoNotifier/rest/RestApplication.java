@@ -27,7 +27,9 @@ public class RestApplication extends Application {
 		classes.add(KontoService.class);
 		classes.add(FilterService.class);
 		classes.add(UserService.class);
+		classes.add(LoginServiceGoogle.class);
 		classes.add(LoginService.class);
+		
 	}
 
 	@Override

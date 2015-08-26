@@ -23,6 +23,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 
 
@@ -32,14 +33,14 @@ public class AllDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	public IDTO persist(IDTO dto) throws Exception {
+	public IDTO persist(IDTO dto) throws PersistenceException {
 		IDTO result = em.merge(dto);
 		em.flush();
 		return result;
 	}
 
 	// TODO genercis?
-	public List getAll(IDTO dto) throws Exception {
+	public List getAll(IDTO dto) throws PersistenceException {
 		String dtoName = dto.getClass().getSimpleName();
 		List<IDTO> result = em.createQuery("SELECT e FROM " + dtoName + " e")
 				.getResultList();
@@ -51,7 +52,7 @@ public class AllDAO {
 		return res;
 	}
 
-	public List<UserDTO> getUserByMail(String email) throws Exception {
+	public List<UserDTO> getUserByMail(String email) throws PersistenceException {
 		Query q = em.createQuery("SELECT e FROM UserDTO e WHERE e.email = :email");
 		q.setParameter("email", email);
 		@SuppressWarnings("unchecked")
@@ -59,7 +60,7 @@ public class AllDAO {
 		return result;
 	}
 
-	public List<FilterDTO> getFilterOfUser(KontoDTO konto) throws Exception {
+	public List<FilterDTO> getFilterOfUser(KontoDTO konto) throws PersistenceException {
 		Query q = em.createQuery("SELECT e FROM FilterDTO e WHERE konto.id = :id");
 		q.setParameter("id", konto.getId());
 		@SuppressWarnings("unchecked")
@@ -67,7 +68,7 @@ public class AllDAO {
 		return result;
 	}
 
-	public List<KontoDTO> getKontenOfUser(UserDTO user) throws Exception {
+	public List<KontoDTO> getKontenOfUser(UserDTO user) throws PersistenceException {
 		Query q = em.createQuery("SELECT e FROM KontoDTO e WHERE e.user.id = :userid");
 		q.setParameter("userid", user.getId());
 		@SuppressWarnings("unchecked")

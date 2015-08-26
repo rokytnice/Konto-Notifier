@@ -46,7 +46,7 @@
 //     	 signOut();
 //          }
      
-     document.getElementById("introtext").innerHTML = "Bitte Google EMail anmelden.";
+     document.getElementById("introtext").innerHTML = "";
 //      document.getElementById("footer").hide();
 
      
@@ -110,7 +110,15 @@
          saveKonto(dataKonto);
      });
 
-    
+     $('#registration-form').submit(function(event) {
+         event.preventDefault();
+         registerUser();
+     });
+
+     $('#login-form').submit(function(event) {
+         event.preventDefault();
+         login();
+     });
      
  });
 
@@ -123,29 +131,68 @@
 	<div id="container">
 	
 		<section>
-			<article id="intro-art" data-role="page" data-title="Kontoagent Home">
+			<article id="login-article" data-role="page" data-title="Kontoagent Home">
 				<!-- Header -->
 				<div data-role="header" class="header">
-						<h3>Kontoagenten -  <p id="username1">not loged in</p></h3>
+						<h3>Kontoagenten  <p id="username1"></p></h3>
 				</div>
-				<!-- /Header -->
 				<div class="ui-content" role="main">
 					<div class="wrap">
+						<form name="login-form" id="login-form" data-ajax="false">
 						<p id="introtext"><p>
 						<p></p>
 						<br>
-						<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
-														<a href="#" onclick="signOut();">Sign out</a>
 						
+						<label for="email">E-Mail Addresse</label>
+						<input type="text" name="email" id="email" value="">
+						<label for="password">Passwort</label>
+						<input type="password" name="password" id="password" value="">
+						<input type="submit" value="Login"></input> <br>
+						<div id="login-formMsgs"></div>
+						<a href="#registration-article">Registrierung</a>
+						
+<!-- 						<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
+<!-- 						<a href="#" onclick="signOut();">Sign out</a> -->
+						</form>
 					</div>
 				</div>
 			</article>
+
+
+
+			<article id="registration-article" data-role="page" data-title="Kontoagent Home">
+				<!-- Header -->
+				<div data-role="header" class="header">
+						<h3>Kontoagenten  <p id="username1"></p></h3>
+				</div>
+				<div class="ui-content" role="main">
+					<div class="wrap">
+					<form name="registration-form" id="registration-form" data-ajax="false">
+						<p id="introtext"><p>
+						<p></p>
+						<br>
+				        <label for="email">E-Mail Addresse</label>
+				        <input type="text" name="email" id="email" value="">
+				        <label for="password">Passwort</label>
+				        <input type="password" name="password" id="reg-password" value="">
+				        <label for="txt-password-confirm">Confirm Password</label>
+				        <input type="password" name="password-confirm" id="reg-password-confirm" value=""><br>
+				        <input type="submit" value="Registrieren"></input> <br>
+				       	<div id="registration-formMsgs"></div>
+						<a href="#login-article">Login</a>
+				        
+				        </form>
+					</div>
+				</div>
+			</article>
+
+
 
 		<article id="kontoanlegen-art" data-role="page"
 				data-title="Notifier hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Kontoverbindung hinzufügen -  <p id="username2">not loged in</p></h3>
+					<h3>Kontoverbindung hinzufügen -  <p id="username2">nicht angemeldet</p></h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -153,7 +200,7 @@
 
 						<form name="konto-reg" id="konto-reg" data-ajax="false">
 
-							<h2>Zugangsdaten Online Banking:</h2>
+							<h3>Zugangsdaten Online Banking:</h3>
 							<br> 
 							<label>Kontonr.</label> <input name="ktonr" value="" 
 								type="text"> <label>Bankleitzahl</label> <input
@@ -172,14 +219,14 @@
 				data-title="Kontoagent hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Kontoagenten anlegen -  <p id="username3">not loged in</p></h3>
+					<h3>Kontoagenten anlegen -  <p id="username3">nicht angemeldet</p></h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
 					<div class="wrap">
 						<form name="not-reg" id="not-reg" data-ajax="false">
 
-							<h2></h2>
+							<h3></h3>
 							<br> <label>Konto</label> 
 							<select id="kontoSelection"
 								name="kontoSelection" value="" type="text">
@@ -201,21 +248,21 @@
 			<article id="notifiers-art" data-role="page" data-title="Liste von Agenten">
                 <!-- Header -->
                 <div data-role="header" class="header" data-position="fixed">
-                    <h3>Alle Agenten -  <p id="username4">not loged in</p></h3>
+                    <h3>Alle Agenten -  <p id="username4">nicht angemeldet</p></h3>
                 </div>
                 <!-- /Header -->
 
                 <div class="ui-content" role="main">
                     <div class="wrap">
-                        <button id="refreshButton-notifiers" data-role="button" data-inline="true" data-icon="refresh">Aktualisiere Liste</button>
+                        <button id="refreshButton-notifiers" data-role="button" data-inline="true" data-icon="refresh">aktualisieren</button>
                         <table data-role="table" id="notifiers-table" data-mode="columntoggle" class="ui-responsive table-stroke ui-table ui-table-columntoggle">
                             
                             <thead>
                                 <tr>
                                     <th data-priority="2">Konto</th>
                                     Kontonr.<th data-priority="2">Suchtext</th>
-                                    <th data-priority="2">Min €</th>
-                                    <th data-priority="2">Max € #</th>
+                                    <th data-priority="2">Minimum &euro; </th>
+                                    <th data-priority="2">Maximum &euro;</th>
                                      <th data-priority="2"></th>
                                 </tr>
                             </thead>
@@ -242,7 +289,7 @@
 			<article id="kontos-art" data-role="page" data-title="Liste Konten">
                 <!-- Header -->
                 <div data-role="header" class="header" data-position="fixed">
-                    <h3>Alle Kontoverbindungen-  <p id="username5">not loged in</p></h3>
+                    <h3>Alle Kontoverbindungen-  <p id="username5">nicht angemeldet</p></h3>
                 </div>
                 <!-- /Header -->
 
@@ -276,7 +323,7 @@
 				<div data-role="navbar">
 					<ul>
 					 								
-						<li><a href="#intro-art" data-icon="home" class="ui-btn-active">Hauptmenü</a></li>
+						<li><a href="#login-article" data-icon="home" class="ui-btn-active">Hauptmenü</a></li>
                         <li><a href="#kontoanlegen-art" data-icon="plus">Konto anlegen</a></li>
                         <li><a href="#kontos-art" data-icon="grid">Kontenliste</a></li>
                         <li><a href="#not-art" data-icon="plus">Agent anlegen</a></li>

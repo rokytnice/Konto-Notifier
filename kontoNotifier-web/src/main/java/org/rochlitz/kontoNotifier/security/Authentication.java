@@ -20,13 +20,16 @@ public class Authentication {
 
 	private static final String userSessionParamName = "user";
 
-	public void setUserToSession(HttpServletRequest request, UserDTO user)
-			throws AuthenticationException, Exception {
-
+	public boolean setUserToSession(HttpServletRequest request, UserDTO user)
+			throws AuthenticationException {
+		if(!user.isActive()){
+			return false;
+		}
 		System.out.println("read from session " + request.getSession().getId());
 		request.getSession().setAttribute(userSessionParamName, user);
 		System.out.println("save user to session - " + user.getEmail()
 				+ "  -   " + request.getSession().getId());
+		return true;
 	}
 
 	public UserDTO getUserFromSession(HttpServletRequest request)

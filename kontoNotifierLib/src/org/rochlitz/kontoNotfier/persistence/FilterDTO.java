@@ -3,6 +3,7 @@ package org.rochlitz.kontoNotfier.persistence;
 import java.lang.reflect.Field;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -102,7 +103,7 @@ public class FilterDTO implements IDTO {
 	@Column(name = "ENABLED")
 	private boolean enable;// default = true later - disable
 
-	@ManyToOne
+	@ManyToOne(cascade={CascadeType.ALL})
 	@JoinColumn(name = "FK_KONTO_ID") //FK_USER_ID
 	private KontoDTO konto;
 
