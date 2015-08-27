@@ -1,7 +1,7 @@
 require("https://apis.google.com/js/platform.js");
 require("js/libs/sha512.js");
 
-var serviceRootUrl = "https://kontoagent.ddns.net/notifier";
+var serviceRootUrl = "https://kontoagent.ddns.net/notifier/";
 
 /* Builds the updated table for the member list */
 function buildMemberRows(members) {
