@@ -1,6 +1,8 @@
 package org.rochlitz.kontoNotfier.persistence;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLDecoder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -36,7 +38,7 @@ public class KontoDTO implements IDTO {
 					continue;
 				}
 				String key = keyValue[0];
-				String value = keyValue[1];
+				String value = URLDecoder.decode( keyValue[1], "UTF-8" );
 
 				Field field = this.getClass().getDeclaredField(key);
 				field.setAccessible(true);
@@ -49,11 +51,11 @@ public class KontoDTO implements IDTO {
 													// verwendet werden
 					field.set(this, Integer.parseInt(value));
 				} else {
-					field.set(this, keyValue[1]);
+					field.set(this, value);
 				}
 			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException
 					| SecurityException | IllegalArgumentException
-					| IllegalAccessException e) {
+					| IllegalAccessException | UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -83,7 +85,7 @@ public class KontoDTO implements IDTO {
 	@Column(name = "PASSWORD")
 	private String password;// password zum account / zugangsnummer
 
-	@ManyToOne(cascade={CascadeType.ALL})
+	@ManyToOne//(cascade={CascadeType.ALL})
 	@JoinColumn(name = "FK_USER_ID")
 	private UserDTO user;
 
@@ -159,6 +161,7 @@ public class KontoDTO implements IDTO {
 		this.id = id;
 	}
 
+	
 //	public List<FilterDTO> getFilters() {
 //		return filters;
 //	}

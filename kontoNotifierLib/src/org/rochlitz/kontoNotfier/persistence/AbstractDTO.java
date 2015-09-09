@@ -1,6 +1,8 @@
 package org.rochlitz.kontoNotfier.persistence;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLDecoder;
 
 public class AbstractDTO implements IDTO {
 	
@@ -21,7 +23,7 @@ public class AbstractDTO implements IDTO {
 					continue;
 				}
 				String key = keyValue[0];
-				String value = keyValue[1];
+				String value = URLDecoder.decode( keyValue[1], "UTF-8" );
 				
 				Field field = this.getClass().getDeclaredField(key);
 				field.setAccessible(true);
@@ -34,7 +36,7 @@ public class AbstractDTO implements IDTO {
 				 }else{
 					 field.set(this,keyValue[1]);
 				 }
-			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

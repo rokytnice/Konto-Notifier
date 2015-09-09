@@ -1,12 +1,13 @@
 package org.rochlitz.kontoNotfier.persistence;
 
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.net.URLDecoder;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -38,7 +39,7 @@ public class FilterDTO implements IDTO {
 					continue;
 				}
 				String key = keyValue[0];
-				String value = keyValue[1];
+				String value = URLDecoder.decode( keyValue[1], "UTF-8" );
 
 				Field field = this.getClass().getDeclaredField(key);
 				field.setAccessible(true);
@@ -52,11 +53,11 @@ public class FilterDTO implements IDTO {
 											// werden
 					field.set(this, Integer.parseInt(value));
 				} else {
-					field.set(this, keyValue[1]);
+					field.set(this, value);
 				}
 			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException
 					| SecurityException | IllegalArgumentException
-					| IllegalAccessException e) {
+					| IllegalAccessException | UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -68,7 +69,7 @@ public class FilterDTO implements IDTO {
 	@Id
 	@GeneratedValue
 	@Column(name = "FILTER_ID")
-	private Integer id;
+	private Long id;
 
 	@Column(name = "SEARCH")
 	private String search;
@@ -103,8 +104,8 @@ public class FilterDTO implements IDTO {
 	@Column(name = "ENABLED")
 	private boolean enable;// default = true later - disable
 
-	@ManyToOne(cascade={CascadeType.ALL})
-	@JoinColumn(name = "FK_KONTO_ID") //FK_USER_ID
+	@ManyToOne//(cascade={CascadeType.ALL})
+	@JoinColumn(name = "FK_KONTO_ID") 
 	private KontoDTO konto;
 
 	// this will be filled by rest webservice and contains id from konto during
@@ -194,11 +195,11 @@ public class FilterDTO implements IDTO {
 		this.searchInBuchungAuftraggeber = searchInBuchungAuftraggeber;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

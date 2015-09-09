@@ -149,8 +149,7 @@ function saveKonto(data) {
 	// Display the loader widget
 	$.mobile.loading("show");
 
-	$
-			.ajax({
+	$.ajax({
 				url : serviceRootUrl + "rest/konto",
 				contentType : "application/json",
 				dataType : "json",
@@ -193,7 +192,7 @@ function saveKonto(data) {
 			});
 }
 
-function saveNotifier(data) {
+function saveFilter(data) {
 	// clear existing msgs
 	$('span.invalid').remove();
 	$('span.success').remove();
@@ -201,8 +200,7 @@ function saveNotifier(data) {
 	// Display the loader widget
 	$.mobile.loading("show");
 
-	$
-			.ajax({
+	$.ajax({
 				url : serviceRootUrl + "rest/notifier",
 				contentType : "application/json",
 				dataType : "json",
@@ -343,8 +341,7 @@ function onSignIn(googleUser) {
 
 function deleteKonto(id) {
 	console.log("del konto id: " + id);
-	$
-			.ajax({
+	$.ajax({
 				url : serviceRootUrl + "rest/konto/deletekonto/" + id,
 				contentType : "application/json",
 				dataType : "json",
@@ -382,8 +379,7 @@ function deleteKonto(id) {
 
 function deleteFilter(id) {
 	console.log("del filter id: " + id);
-	$
-			.ajax({
+	$.ajax({
 				url : serviceRootUrl + "rest/notifier/deletefilter/" + id,
 				contentType : "application/json",
 				dataType : "json",

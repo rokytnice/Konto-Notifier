@@ -167,7 +167,9 @@ public class KontoService {
 			@Context HttpServletRequest request) throws AuthenticationException {
 		authServ.getUserFromSession(request);
 		try {
-			kDAO.deleteNotfifier(Long.parseLong(id));
+//			kDAO.deleteKontoWithFilter(Long.parseLong(id));
+			kDAO.deleteKonto(Long.parseLong(id));
+			//TODO DELETE PASSPORTFILE !!!!!!!!!!!!!!
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

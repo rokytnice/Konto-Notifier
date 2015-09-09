@@ -1,0 +1,6 @@
+11:31:42,452 INFO [com.eviware.soapui.impl.WorkspaceImpl] Loading workspace from [/home/aroc/workspace/kontoNotifier/default-soapui-workspace.xml]
+11:31:42,816 INFO [com.eviware.soapui.impl.wsdl.WsdlProject] Loaded project from [file:/home/aroc/samba/VW-CarNet/SOAPUI/HTI-soapui-project-20140423.xml]
+11:31:42,836 WARN [com.eviware.soapui.impl.wsdl.WsdlProject] Project 'HTI' is from a newer version (5.2.0) of soapUI than this (4.0.1.1) and parts of it may be incompatible or incorrect. Saving this project with this version of soapUI may cause it to function differently.
+11:31:53,226 DEBUG [com.eviware.soapui.threads] SwtFileDialogs.openFile -> runInUIThread
+11:31:53,230 DEBUG [com.eviware.soapui.threads] runInUIThread: syncExec com.eviware.x.impl.swt.SwtFileDialogs$2
+11:31:53,230 DEBUG [com.eviware.soapui.threads] SwtFileDialogs.openFile: run

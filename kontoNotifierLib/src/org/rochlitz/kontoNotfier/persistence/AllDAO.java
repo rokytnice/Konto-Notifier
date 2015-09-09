@@ -68,6 +68,8 @@ public class AllDAO {
 		return result;
 	}
 
+	
+	//TODO delete filter
 	public List<KontoDTO> getKontenOfUser(UserDTO user) throws PersistenceException {
 		Query q = em.createQuery("SELECT e FROM KontoDTO e WHERE e.user.id = :userid");
 		q.setParameter("userid", user.getId());
@@ -77,7 +79,7 @@ public class AllDAO {
 	}
 
 	//TODO delete also file
-	public void deleteNotfifier(long kontoid) {
+	public void deleteKontoWithFilter(long kontoid) {
 		Query q = em.createQuery("SELECT e FROM FilterDTO e WHERE e.konto.id = :id");
 		q.setParameter("id", kontoid);
 		List<FilterDTO> result =  q.getResultList();
@@ -90,10 +92,15 @@ public class AllDAO {
 		em.remove(konto);
 		em.flush();
 	}
+	
+	public void deleteKonto(Long kontoId) {
+		KontoDTO filter = em.getReference(KontoDTO.class, kontoId);
+		em.remove(filter);
+		em.flush();
+	}	
 
-	public void deleteFilter(Integer filterId) {
-
-		FilterDTO filter = em.getReference(FilterDTO.class, filterId);
+	public void deleteFilter(Long pk) {
+		FilterDTO filter = em.getReference(FilterDTO.class, pk);//
 		 //TODO validate is konto from current user??
 		em.remove(filter);
 		em.flush();

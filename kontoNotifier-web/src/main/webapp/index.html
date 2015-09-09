@@ -101,7 +101,7 @@
      $('#not-reg').submit(function(event) {
          event.preventDefault();
          var dataNot = JSON.stringify($('#not-reg').serialize());
-         saveNotifier(dataNot);
+         saveFilter(dataNot);
      });
 
      $('#konto-reg').submit(function(event) {

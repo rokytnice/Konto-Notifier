@@ -95,12 +95,10 @@ public class FilterService {
 			e.printStackTrace();
 		}
 		 GenericEntity<List<FilterDTO>> list = new GenericEntity<List<FilterDTO>>(filters) {
-	        };
+	     };
 	        
 	       Response result = Response.ok(list).build();
-	    		 
 		return result;
-
 	}
 	
     @GET
@@ -110,7 +108,7 @@ public class FilterService {
     	Response.ResponseBuilder builder = Response.ok();
 		Response result = builder.build();
 		try {
-			kDAO.deleteFilter(Integer.parseInt(id) ); 
+			kDAO.deleteFilter(Long.parseLong(id) ); 
 			builder = Response.ok();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
