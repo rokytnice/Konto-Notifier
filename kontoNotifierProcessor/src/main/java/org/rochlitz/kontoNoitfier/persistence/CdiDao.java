@@ -43,8 +43,7 @@ public class CdiDao {
 
 		String dtoName = dto.getClass().getSimpleName();
 
-		List<IDTO> result = em.createQuery("SELECT e FROM " + dtoName + " e")
-				.getResultList();
+		List<IDTO> result = em.createQuery("SELECT e FROM " + dtoName + " e").getResultList();
 		return result;
 
 	}
