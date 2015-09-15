@@ -1,4 +1,4 @@
-package org.rochlitz.kontoNotfier.persistence;
+package org.rochlitz.kontoNoitfier.persistence;
 
 //import java.util.logging.Logger;
 
@@ -10,6 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+
+import org.rochlitz.kontoNotfier.persistence.FilterDTO;
+import org.rochlitz.kontoNotfier.persistence.IDTO;
+import org.rochlitz.kontoNotfier.persistence.KontoDTO;
+import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 //TODO activate findbug pmd, checkstyle ..
 //TODO logging

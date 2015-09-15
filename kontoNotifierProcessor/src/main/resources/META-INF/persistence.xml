@@ -9,9 +9,9 @@
 		 <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
 		<jta-data-source>java:jboss/datasources/MySQLDS</jta-data-source>
-		<class>org.rochlitz.kontoNotfier.persistence.FilterDTO</class>
-		<class>org.rochlitz.kontoNotfier.persistence.UserDTO</class>
-		<class>org.rochlitz.kontoNotfier.persistence.KontoDTO</class>
+		<class>org.rochlitz.kontoNoitfier.persistence.FilterDTO</class>
+		<class>org.rochlitz.kontoNoitfier.persistence.UserDTO</class>
+		<class>org.rochlitz.kontoNoitfier.persistence.KontoDTO</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />

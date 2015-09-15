@@ -13,7 +13,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.rochlitz.kontoNotfier.persistence.CdiDao;
+import org.rochlitz.kontoNoitfier.persistence.CdiDao;
 import org.rochlitz.kontoNotfier.persistence.FilterDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
