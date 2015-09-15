@@ -9,7 +9,7 @@
 	<description>DAOS </description>
 	<url> </url>
 
-	 
+
 	<repositories>
 		<repository>
 			<id>redhat-techpreview-all-repository</id>
@@ -61,49 +61,14 @@
 		<version.war.plugin>2.1.1</version.war.plugin>
 
 		<!-- maven-compiler-plugin -->
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
 	</properties>
 
 
 	<dependencies>
-		<!-- First declare the APIs we depend on and need for compilation. All 
-			of them are provided by JBoss -->
+		 
 
-		<!-- Import the CDI API, we use provided scope as the API is included in 
-			JBoss -->
-
-		<!-- Import the Common Annotations API (JSR-250), we use provided scope 
-			as the API is included in JBoss -->
-
-		<!-- Import the JAX-RS API, we use provided scope as the API is included 
-			in JBoss -->
-
-		<!-- Import the JPA API, we use provided scope as the API is included in 
-			JBoss -->
-
-		<!-- Import the EJB API, we use provided scope as the API is included in 
-			JBoss -->
-
-		<!-- Import the Servlet API, we use provided scope as the API is included 
-			in JBoss EAP 6 -->
-
-		<!-- JSR-303 (Bean Validation) Implementation -->
-		<!-- Provides portable constraints such as @Email -->
-		<!-- Hibernate Validator is shipped in JBoss -->
-
-		<!-- Now we declare any tools needed -->
-
-		<!-- Annotation processor to generate the JPA 2.0 metamodel classes for 
-			typesafe criteria queries -->
-
-		<!-- Needed for running tests (you may also use TestNG) -->
-
-		<!-- Optional, but highly recommended -->
-		<!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA) 
-			JPA from JUnit/TestNG -->
-
-		
 
 	</dependencies>
 

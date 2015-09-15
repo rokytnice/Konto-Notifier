@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="kontoNotifier-web">
-        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/main/webapp/WEB-INF/lib"/>
-        <dependent-module archiveName="java4hbci.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/java4hbci/java4hbci">
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <dependent-module archiveName="hbci4java.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/hbci4java/hbci4java">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="kontoNotifierLib.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierLib/kontoNotifierLib">
@@ -12,7 +13,7 @@
         <dependent-module archiveName="kontoNotifierHBCI.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierHBCI/kontoNotifierHBCI">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <property name="java-output-path" value="/kontoNotifier-web/target/classes"/>
         <property name="context-root" value="kontoNotifier-web"/>
+        <property name="java-output-path" value="/kontoNotifier-web/target/classes"/>
     </wb-module>
 </project-modules>

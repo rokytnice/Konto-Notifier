@@ -9,7 +9,7 @@
 	<description>HBCI Stuff </description>
 	<url> </url>
 
-	 
+
 	<repositories>
 		<repository>
 			<id>redhat-techpreview-all-repository</id>
@@ -21,6 +21,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+
 	</repositories>
 
 	<pluginRepositories>
@@ -61,69 +62,19 @@
 		<version.war.plugin>2.1.1</version.war.plugin>
 
 		<!-- maven-compiler-plugin -->
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.7</maven.compiler.source>
 	</properties>
 
-
 	<dependencies>
-		<!-- First declare the APIs we depend on and need for compilation. All 
-			of them are provided by JBoss -->
+	
+		<dependency>
+			<groupId>org.wildfly.core</groupId>
+			<artifactId>wildfly-cli</artifactId>
+			<version>LATEST</version>
+			<scope>runtime</scope>
+		</dependency>
 
-		<!-- Import the CDI API, we use provided scope as the API is included in 
-			JBoss -->
-
-		<!-- Import the Common Annotations API (JSR-250), we use provided scope 
-			as the API is included in JBoss -->
-
-		<!-- Import the JAX-RS API, we use provided scope as the API is included 
-			in JBoss -->
-
-		<!-- Import the JPA API, we use provided scope as the API is included in 
-			JBoss -->
-
-		<!-- Import the EJB API, we use provided scope as the API is included in 
-			JBoss -->
-
-		<!-- Import the Servlet API, we use provided scope as the API is included 
-			in JBoss EAP 6 -->
-
-		<!-- JSR-303 (Bean Validation) Implementation -->
-		<!-- Provides portable constraints such as @Email -->
-		<!-- Hibernate Validator is shipped in JBoss -->
-
-		<!-- Now we declare any tools needed -->
-
-		<!-- Annotation processor to generate the JPA 2.0 metamodel classes for 
-			typesafe criteria queries -->
-
-		<!-- Needed for running tests (you may also use TestNG) -->
-
-		<!-- Optional, but highly recommended -->
-		<!-- Arquillian allows you to test enterprise code such as EJBs and Transactional(JTA) 
-			JPA from JUnit/TestNG -->
-
-
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>${project.groupId}</groupId> -->
-<!-- 			<artifactId>kontoNotfierHBCI</artifactId> -->
-<!-- 			<version>${project.version}</version> -->
-<!-- 		</dependency> -->
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>${project.groupId}</groupId> -->
-<!-- 			<artifactId>kontoNotfierLib</artifactId> -->
-<!-- 			<version>${project.version}</version> -->
-<!-- 		</dependency> -->
-		
-<!-- 		<dependency> -->
-<!-- 			<groupId>${project.groupId}</groupId> -->
-<!-- 			<artifactId>java4hbci</artifactId> -->
-<!-- 			<version>${project.version}</version> -->
-<!-- 		</dependency> -->
-				
-		
 	</dependencies>
 
 
@@ -240,7 +191,7 @@
 			</build>
 		</profile>
 
-	 
+
 
 	</profiles>
 	<packaging>war</packaging>
