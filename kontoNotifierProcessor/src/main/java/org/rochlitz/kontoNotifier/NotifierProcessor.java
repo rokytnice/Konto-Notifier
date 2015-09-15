@@ -23,11 +23,11 @@ import org.rochlitz.kontoNotfier.persistence.UserDTO;
  *
  *         reads nots from db and put them to queue and waits until queue has
  *         mor space or time is for next sceduling
- * @param <NotfierCallableTask>
+ * @param <FilterMessageCallableTask>
  * 
  */
 
-//@Singleton
+// @Singleton
 @Named("NotifierProcessor")
 @ApplicationScoped
 public class NotifierProcessor {
@@ -40,45 +40,37 @@ public class NotifierProcessor {
 
 	@Inject
 	private CdiDao dao;
-	
+
 	public void processing() {
 		try {
 
 			@SuppressWarnings("unchecked")
 			List<UserDTO> users = dao.getAll(new UserDTO());
-			Collection<NotfierCallableTask> notTasks = new ArrayList<NotfierCallableTask>();
+			Collection<FilterMessageCallableTask> notTasks = new ArrayList<FilterMessageCallableTask>();
 
 			Iterator<UserDTO> iter = users.iterator();
-			while(iter.hasNext()){
+			while (iter.hasNext()) { // for all user
 				UserDTO user = iter.next();
 				List<KontoDTO> konten = dao.getKontenOfUser(user);
-				if(konten.isEmpty())
+				if (konten.isEmpty())
 					continue;
 				Iterator<KontoDTO> iter1 = konten.iterator();
-				while(iter1.hasNext()){
+
+				while (iter1.hasNext()) { // for all kontos of user
 					KontoDTO konto = iter1.next();
-					
-					List<FilterDTO> filterOfUser = dao.getFilterOfUser(konto);
-					if(filterOfUser.isEmpty())
-						continue;
-					Iterator<FilterDTO> iter2 = filterOfUser.iterator();
-					FilterDTO filter = iter2.next();
-					NotfierCallableTask n = new NotfierCallableTask( filter , user , konto);
+					List<FilterDTO> filterOfKonto = dao.getFilterOfUser(konto);
+
+					FilterMessageCallableTask n = new FilterMessageCallableTask(
+							filterOfKonto, user, konto);
 					n.call();
 				}
 			}
-			
-//			notTasks.addAll( notTasks);
-
-			//TODO clean up code  --- beacause disabled threading - ist schon gelöst in HBCICallbackThreaded
-//		  executorService.invokeAll(  notTasks);
-
 
 		} catch (Exception e) {
 			// logger.log(Level.SEVERE, e.getMessage(), e);
 			e.printStackTrace();
-			
-			//TODO config : queue-length="1000" at <managed-executor-service
+
+			// TODO config : queue-length="1000" at <managed-executor-service
 		}
 	}
 

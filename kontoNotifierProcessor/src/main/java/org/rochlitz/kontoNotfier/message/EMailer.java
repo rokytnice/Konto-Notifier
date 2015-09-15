@@ -21,7 +21,7 @@ import org.rochlitz.kontoNotfier.persistence.UserDTO;
 public class EMailer {
 	
 	
-	public static void mail(String usage, FilterDTO filter, UserDTO user) {
+	public static void mail(String usage, UserDTO user) {
 		String email = user.getEmail();
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
@@ -50,9 +50,9 @@ public class EMailer {
 	        calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
 	        
 			message.setSubject("Kontoagenten Benachrichtigung für den Zeitraum von " + calStart.getTime() + " bis " + calEnd.getTime());
-			message.setText(" Filter\n\n Suchtext: " + filter.getSearch() + "\n Minimaler Betrag  " + filter.getMinValue() +"\n Maximaler Betrag:  " +  filter.getMaxValue() + 
-					"\n\n  "+usage);
- 
+			String messageText = usage;
+			message.setText(messageText.replaceAll("null", ""));
+			
 			Transport.send(message);
  
 			System.out.println(" ++++++++++++++++++++++++++++ Mail an "+ email +" versendet.");
