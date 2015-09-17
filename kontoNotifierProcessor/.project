@@ -4,9 +4,9 @@
 	<comment></comment>
 	<projects>
 		<project>java4hbci</project>
-		<project>kontoNotifierLib</project>
 		<project>kontoNotifierHBCI</project>
 		<project>hbci4java</project>
+		<project>kontoNotifierPersistence</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

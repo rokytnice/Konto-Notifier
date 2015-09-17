@@ -56,7 +56,7 @@ public class FilterMessageCallableTask implements Callable<Boolean> {
 				while(iter.hasNext()){   //every Umsatz will checked against 
 					GVRKUms.BTag d = iter.next();
 					String umsatzBTag = d.toString();
-					Iterator<GVRKUms.UmsLine> iterLines = d.lines.iterator();
+					Iterator<Ghibernate jpVRKUms.UmsLine> iterLines = d.lines.iterator();
 					while(iterLines.hasNext()){
 						GVRKUms.UmsLine line = iterLines.next();
 						String usage = line.usage.toString().toLowerCase();

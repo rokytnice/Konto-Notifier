@@ -5,7 +5,6 @@
 	<projects>
 		<project>kontoNotfierEJB</project>
 		<project>kontoNotifierPersistence</project>
-		<project>kontoNotifierLib</project>
 		<project>java4hbci</project>
 		<project>kontoNotifierHBCI</project>
 		<project>hbci4java</project>

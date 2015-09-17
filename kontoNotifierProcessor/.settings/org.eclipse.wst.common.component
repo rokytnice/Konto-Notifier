@@ -5,10 +5,10 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/main/webapp/WEB-INF/lib"/>
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
-        <dependent-module archiveName="hbci4java.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/hbci4java/hbci4java">
+        <dependent-module archiveName="kontoNotifierPersistence.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierPersistence/kontoNotifierPersistence">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="kontoNotifierLib.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierLib/kontoNotifierLib">
+        <dependent-module archiveName="hbci4java.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/hbci4java/hbci4java">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="kontoNotifierHBCI.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierHBCI/kontoNotifierHBCI">
