@@ -14,8 +14,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.rochlitz.kontoNoitfier.persistence.CdiDao;
+import org.rochlitz.kontoNotfier.persistence.AllDAO;
 import org.rochlitz.kontoNotfier.persistence.FilterDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
+import org.rochlitz.kontoNotfier.persistence.KontoauszugDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 /**
@@ -41,6 +43,7 @@ public class NotifierProcessor {
 	@Inject
 	private CdiDao dao;
 
+	//load test this
 	public void processing() {
 		try {
 
@@ -62,8 +65,10 @@ public class NotifierProcessor {
 
 					FilterMessageCallableTask n = new FilterMessageCallableTask(
 							filterOfKonto, user, konto);
-					n.call();
-				}
+					KontoauszugDTO kauz = n.call();
+					if(kauz!=null){
+						dao.persist(kauz);}
+					}
 			}
 
 		} catch (Exception e) {

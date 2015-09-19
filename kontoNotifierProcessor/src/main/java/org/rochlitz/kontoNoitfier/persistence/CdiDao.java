@@ -32,11 +32,7 @@ public class CdiDao {
 	@PersistenceContext
 	private EntityManager em;
 
-	// TODO test hbci data / connection
-	public void persist(IDTO dto) throws PersistenceException {
-		em.persist(dto);
-		em.flush();
-	}
+
 
 	// TODO genercis?
 	public List getAll(IDTO dto) throws PersistenceException {
@@ -80,6 +76,12 @@ public class CdiDao {
 		q.setParameter("userid", user.getId());
 		@SuppressWarnings("unchecked")
 		List<KontoDTO> result = q.getResultList();
+		return result;
+	}
+	
+	public IDTO persist(IDTO dto) throws PersistenceException {
+		IDTO result = em.merge(dto);
+		em.flush();
 		return result;
 	}
 

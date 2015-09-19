@@ -4,6 +4,15 @@
         <wb-resource deploy-path="/WEB-INF/lib" source-path="/src/main/webapp/WEB-INF/lib"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
+        <dependent-module archiveName="kontoNotifierPersistence.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierPersistence/kontoNotifierPersistence">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="hbci4java.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/hbci4java/hbci4java">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="kontoNotifierHBCI.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierHBCI/kontoNotifierHBCI">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="kontoNotifier-web"/>
         <property name="java-output-path" value="/kontoNotifier-web/target/classes"/>
     </wb-module>

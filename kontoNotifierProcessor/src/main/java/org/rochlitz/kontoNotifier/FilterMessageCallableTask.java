@@ -1,26 +1,33 @@
 package org.rochlitz.kontoNotifier;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.kapott.hbci.GV_Result.GVRKUms;
 import org.kapott.hbci.manager.HBCIUtils;
+import org.rochlitz.hbci.tests.web.GVBase;
 import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
 import org.rochlitz.hbci.tests.web.MyCallback;
-import org.rochlitz.kontoNotfier.message.EMailer;
+import org.rochlitz.kontoNoitfier.persistence.CdiDao;
 import org.rochlitz.kontoNotfier.persistence.FilterDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
+import org.rochlitz.kontoNotfier.persistence.KontoauszugDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 @Named("NotfierCallableTask")
-public class FilterMessageCallableTask implements Callable<Boolean> {
+public class FilterMessageCallableTask implements Callable<KontoauszugDTO> {
 
 	private List<FilterDTO> filters;
 	private UserDTO user;
 	private KontoDTO konto;
+	@Inject
+	private CdiDao dao;
 
 	public FilterMessageCallableTask(List<FilterDTO> filters, UserDTO user, KontoDTO konto) {
 		this.filters = filters;
@@ -30,7 +37,9 @@ public class FilterMessageCallableTask implements Callable<Boolean> {
  
 
 	@Override
-	public Boolean call() {
+	public KontoauszugDTO call() {
+		KontoauszugDTO result = null;
+		
 		try {
 			// logger.info("Sleeping...");
 			// Thread.sleep(5000);
@@ -38,12 +47,12 @@ public class FilterMessageCallableTask implements Callable<Boolean> {
 			
 			MyCallback myCallback = new MyCallback( konto, user);
 			
-			
 			KontoAuszugThreaded kontoAuzugThread = new KontoAuszugThreaded(myCallback);
-			GVRKUms result = kontoAuzugThread.getAuszug();
-			List dpd = result.getDataPerDay();
+			GVRKUms umsaetze = kontoAuzugThread.getAuszug();
+			List dpd = umsaetze.getDataPerDay();
 			StringBuffer finalMessage = new StringBuffer();
 			Iterator<FilterDTO> iter2 = filters.iterator();
+			
 			while(iter2.hasNext()){ //for all filter of all kontos of all user, compare all kontoauszüge with all filters
 				FilterDTO filter = iter2.next();
 				System.out.println(" +++++++++++++++++++  callable task user " + user.getEmail()   + " -filter: " +filter.getId() + "  konto : "  + konto.getKtonr()  );
@@ -56,7 +65,7 @@ public class FilterMessageCallableTask implements Callable<Boolean> {
 				while(iter.hasNext()){   //every Umsatz will checked against 
 					GVRKUms.BTag d = iter.next();
 					String umsatzBTag = d.toString();
-					Iterator<Ghibernate jpVRKUms.UmsLine> iterLines = d.lines.iterator();
+					Iterator<GVRKUms.UmsLine> iterLines = d.lines.iterator();
 					while(iterLines.hasNext()){
 						GVRKUms.UmsLine line = iterLines.next();
 						String usage = line.usage.toString().toLowerCase();
@@ -83,8 +92,10 @@ public class FilterMessageCallableTask implements Callable<Boolean> {
 
 						if( message.length()>0 ){
 							if(!messageFilterHeadAdded){
-								messageForFilter.append(" \n\n Suchtext: " + filter.getSearch() + "\n Minimaler Betrag  " + filter.getMinValue() +"\n Maximaler Betrag:  " +  filter.getMaxValue() + 
-								"\n\n  " );
+								String filterSubject = " \n\n Suchtext: " + filter.getSearch() + "\n Minimaler Betrag  " + filter.getMinValue() +"\n Maximaler Betrag:  " +  filter.getMaxValue() + 
+								"\n\n  ";
+								messageForFilter.append(filterSubject.replace("null", ""));
+								
 								messageFilterHeadAdded=true;
 							}
 							messageForFilter.append( message);
@@ -97,7 +108,14 @@ public class FilterMessageCallableTask implements Callable<Boolean> {
 			}
 			
 			if(finalMessage.length() > 0){
-				EMailer.mail(finalMessage.toString(), user);
+				//refactor to utility
+				Calendar calStart = new GregorianCalendar();
+		        Calendar calEnd = new GregorianCalendar();
+		        calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
+				
+		        String subject = "Kontoagenten Benachrichtigung für den Zeitraum von " + calStart.getTime() + " bis " + calEnd.getTime();
+//				EMailer.mail(finalMessage.toString(), user, subject);//send mail
+				result = new KontoauszugDTO(finalMessage.toString(), user, subject);
 			}
 			
 			HBCIUtils.doneThread();//clean up data structure - need to be done for new baking connection
@@ -110,6 +128,7 @@ public class FilterMessageCallableTask implements Callable<Boolean> {
 			e.printStackTrace();
 			HBCIUtils.doneThread();
 		}
-		return new Boolean(true); // sucess
+		
+		return result;  
 	}
 }

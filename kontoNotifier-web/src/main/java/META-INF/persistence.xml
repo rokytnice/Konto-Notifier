@@ -12,6 +12,7 @@
 		<class>org.rochlitz.kontoNotfier.persistence.FilterDTO</class>
 		<class>org.rochlitz.kontoNotfier.persistence.UserDTO</class>
 		<class>org.rochlitz.kontoNotfier.persistence.KontoDTO</class>
+		<class>org.rochlitz.kontoNotfier.persistence.KontoauszugDTO</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />

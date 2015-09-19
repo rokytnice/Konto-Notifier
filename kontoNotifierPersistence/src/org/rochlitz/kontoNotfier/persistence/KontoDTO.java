@@ -1,10 +1,5 @@
 package org.rochlitz.kontoNotfier.persistence;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Field;
-import java.net.URLDecoder;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,52 +10,52 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "KONTO")
-public class KontoDTO implements IDTO {
+public class KontoDTO extends AbstractDTO {
 
 	public KontoDTO() {
 		super();
 	}
 
-	// public KontoDTO(String fieldRest) {
-	// super(fieldRest);
-	// }
+	 public KontoDTO(String fieldRest) {
+		 super(fieldRest);
+	 }
 
-	public KontoDTO(String fieldRest) {
-		super();
-		System.out.println(" ************** rest request " + fieldRest); //
-		fieldRest = fieldRest.replaceAll("\"", "");
-		String[] fields = fieldRest.split("&");
-
-		for (String property : fields) {
-			String[] keyValue = property.split("=");
-			try {
-				if (keyValue.length <= 1) {// no value for key
-					continue;
-				}
-				String key = keyValue[0];
-				String value = URLDecoder.decode( keyValue[1], "UTF-8" );
-
-				Field field = this.getClass().getDeclaredField(key);
-				field.setAccessible(true);
-				Class<?> typeOF = field.getType();
-
-				if (typeOF.equals(Integer.class)) {
-					field.set(this, Integer.parseInt(value));
-				} else if (typeOF.isPrimitive()) {// long sind die einzigsten
-													// primitiven die bisher
-													// verwendet werden
-					field.set(this, Integer.parseInt(value));
-				} else {
-					field.set(this, value);
-				}
-			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException
-					| SecurityException | IllegalArgumentException
-					| IllegalAccessException | UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+//	public KontoDTO(String fieldRest) {
+//		super();
+//		System.out.println(" ************** rest request " + fieldRest); //
+//		fieldRest = fieldRest.replaceAll("\"", "");
+//		String[] fields = fieldRest.split("&");
+//
+//		for (String property : fields) {
+//			String[] keyValue = property.split("=");
+//			try {
+//				if (keyValue.length <= 1) {// no value for key
+//					continue;
+//				}
+//				String key = keyValue[0];
+//				String value = URLDecoder.decode( keyValue[1], "UTF-8" );
+//
+//				Field field = this.getClass().getDeclaredField(key);
+//				field.setAccessible(true);
+//				Class<?> typeOF = field.getType();
+//
+//				if (typeOF.equals(Integer.class)) {
+//					field.set(this, Integer.parseInt(value));
+//				} else if (typeOF.isPrimitive()) {// long sind die einzigsten
+//													// primitiven die bisher
+//													// verwendet werden
+//					field.set(this, Integer.parseInt(value));
+//				} else {
+//					field.set(this, value);
+//				}
+//			} catch (ArrayIndexOutOfBoundsException | NoSuchFieldException
+//					| SecurityException | IllegalArgumentException
+//					| IllegalAccessException | UnsupportedEncodingException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 
 	@Id
 	@GeneratedValue

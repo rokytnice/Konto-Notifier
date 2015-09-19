@@ -14,14 +14,13 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.rochlitz.hbci.tests.web.GVBase;
-import org.rochlitz.kontoNotfier.persistence.FilterDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 @Named("EMailer")
 public class EMailer {
 	
 	
-	public static void mail(String usage, UserDTO user) {
+	public static void mail(String usage, UserDTO user, String subject) {
 		String email = user.getEmail();
 		Properties props = new Properties();
 		props.put("mail.smtp.host", "smtp.gmail.com");
@@ -45,11 +44,8 @@ public class EMailer {
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(email));
 			
-			Calendar calStart = new GregorianCalendar();
-	        Calendar calEnd = new GregorianCalendar();
-	        calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
 	        
-			message.setSubject("Kontoagenten Benachrichtigung für den Zeitraum von " + calStart.getTime() + " bis " + calEnd.getTime());
+			message.setSubject(subject);
 			String messageText = usage;
 			message.setText(messageText.replaceAll("null", ""));
 			
