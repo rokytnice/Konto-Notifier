@@ -455,6 +455,7 @@ function displayEmail(data) {
 	$("#username3").empty().append(data.email);
 	$("#username4").empty().append(data.email);
 	$("#username5").empty().append(data.email);
+	$("#username6").empty().append(data.email);
 }
 
 function login() {
@@ -493,3 +494,47 @@ function login() {
 	});
 	$.mobile.loading("hide");
 }
+
+
+function getKontoAusz(id) {
+	$.ajax({
+				url : serviceRootUrl + "rest/kontoauzug", // + id,
+				contentType : "application/json",
+				dataType : "json",
+				type : "GET",
+				data : id,
+				success : function(data) {
+					$("#kontoauszuege").empty().append(data.subject +  "  <br><br><br>  "  + data.message);
+
+				},
+				error : function(error) {
+					reLoginOnTimedOutSession(error);
+					if ((error.status == 409) || (error.status == 400)) {
+						// console.log("Validation error registering user!");
+
+						var errorMsg = $.parseJSON(error.responseText);
+
+						$.each(errorMsg, function(index, val) {
+							$('<span class="invalid">' + val + '</span>')
+									.insertAfter($('#' + index));
+						});
+					} else {
+						// console.log("error - unknown server issue");
+						$('#kontoausz-Msgs')
+								.append(
+										$('<span class="invalid">Unknown server error</span>'));
+					}
+				},
+				complete : function() {
+					// Hide the loader widget
+					$.mobile.loading("hide");
+
+				}
+			});
+}
+
+//function buildKontoAuszugRows(data) {
+//	return _.template($("#kontoauszug-tmpl").html(), {
+//		"data" : data
+//	});
+//}

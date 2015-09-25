@@ -1,7 +1,5 @@
 package org.rochlitz.kontoNotfier.message;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Properties;
 
 import javax.inject.Named;
@@ -13,7 +11,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import org.rochlitz.hbci.tests.web.GVBase;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
 
 @Named("EMailer")

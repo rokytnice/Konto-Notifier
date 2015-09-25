@@ -2,6 +2,7 @@ package org.rochlitz.kontoNotifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -14,7 +15,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.rochlitz.kontoNoitfier.persistence.CdiDao;
-import org.rochlitz.kontoNotfier.persistence.AllDAO;
+import org.rochlitz.kontoNotfier.message.EMailer;
 import org.rochlitz.kontoNotfier.persistence.FilterDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
 import org.rochlitz.kontoNotfier.persistence.KontoauszugDTO;
@@ -65,9 +66,10 @@ public class NotifierProcessor {
 
 					FilterMessageCallableTask n = new FilterMessageCallableTask(
 							filterOfKonto, user, konto);
-					KontoauszugDTO kauz = n.call();
+					KontoauszugDTO kauz = n.call();//get Kontauszug
 					if(kauz!=null){
-						dao.persist(kauz);}
+						dao.persist(kauz);}//save kontoauszug in db
+					//EMailer.mail(kauz.getMessage(), user, "Filter vom "+ new Date().toString());
 					}
 			}
 

@@ -29,6 +29,7 @@ public class RestApplication extends Application {
 		classes.add(UserService.class);
 		classes.add(LoginServiceGoogle.class);
 		classes.add(LoginService.class);
+		classes.add(KontoauzugService.class);
 		
 	}
 

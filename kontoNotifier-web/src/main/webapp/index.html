@@ -48,7 +48,6 @@
      
      document.getElementById("introtext").innerHTML = "";
 //      document.getElementById("footer").hide();
-
      
      $(function() {
          // Enhance the footer since it is present outside the page definition and hence not enhanced automatically.
@@ -69,25 +68,17 @@
          });
      });
 
-
+//menü button listener
      $("#notifiers-art").on("pagebeforeshow", function() {
          // Fetches the initial   data and populates the table using lodash templates
          updateNotifiersTable();
-     });
-
-     $("#refreshButton-notifiers").click(function(event) {
-    	 updateNotifiersTable();
      });
 
      $("#kontos-art").on("pagebeforeshow", function() {
          // Fetches the initial   data and populates the table using lodash templates
          updatekontosTable();
      });
-
-     $("#refreshButton-kontos").click(function(event) {
-    	 updatekontosTable();
-     });
-
+     
      $("#not-art").on("pagebeforeshow", function() {
          getKontos();
          $("#not-formMsgs").empty();
@@ -97,7 +88,25 @@
     	 $("#konto-formMsgs").empty();
      });
 
+     $("#kontoauszuege-art").on("pagebeforeshow", function() {
+    	 getKontoAusz();
+     });
+
+//other buttons listener
+     $("#refreshButton-kontos").click(function(event) {
+    	 updatekontosTable();
+     });
+   
+     $("#refreshButton-notifiers").click(function(event) {
+    	 updateNotifiersTable();
+     });
      
+     $("#refreshButton-kontoauszug").click(function(event) {
+    	 getKontoAusz();
+     });
+
+
+     //form submit listener
      $('#not-reg').submit(function(event) {
          event.preventDefault();
          var dataNot = JSON.stringify($('#not-reg').serialize());
@@ -119,6 +128,12 @@
          event.preventDefault();
          login();
      });
+
+     $('#login-form').submit(function(event) {
+         event.preventDefault();
+         getKontoAusz();
+     });
+
      
  });
 
@@ -260,7 +275,7 @@
                             <thead>
                                 <tr>
                                     <th data-priority="2">Konto</th>
-                                    Kontonr.<th data-priority="2">Suchtext</th>
+                                    <th data-priority="2">Suchtext</th>
                                     <th data-priority="2">Minimum &euro; </th>
                                     <th data-priority="2">Maximum &euro;</th>
                                      <th data-priority="2"></th>
@@ -315,6 +330,22 @@
                     </div>
                 </div>
             </article>	
+            
+            <article id="kontoauszuege-art" data-role="page" data-title="Liste Kontoauszuege">
+                <!-- Header -->
+                <div data-role="header" class="header" data-position="fixed">
+                    <h3>letzte gefilterte Kontoausz&uuml;ge <p id="username6">nicht angemeldet</p></h3>
+                </div>
+                <!-- /Header -->
+
+                <div class="ui-content" role="main">
+                    <div class="wrap">
+                        <button id="refreshButton-kontoauszug" data-role="button" data-inline="true" data-icon="refresh">aktualisieren</button>
+                        <div id="kontoauszuege"></div>
+                    </div>
+                      <div id="kontoausz-Msgs"></div>
+                </div>
+            </article>	
 
 
 			<!-- Footer -->
@@ -323,11 +354,12 @@
 				<div data-role="navbar">
 					<ul>
 					 								
-						<li><a href="#login-article" data-icon="home" class="ui-btn-active">Hauptmenü</a></li>
+						<!--  >li><a href="#login-article" data-icon="home" class="ui-btn-active">Hauptmenü</a></li-->
                         <li><a href="#kontoanlegen-art" data-icon="plus">Konto anlegen</a></li>
                         <li><a href="#kontos-art" data-icon="grid">Kontenliste</a></li>
-                        <li><a href="#not-art" data-icon="plus">Agent anlegen</a></li>
-                         <li><a href="#notifiers-art" data-icon="grid">Agentenliste</a></li>
+                        <li><a href="#not-art" data-icon="plus">Filter anlegen</a></li>
+                         <li><a href="#notifiers-art" data-icon="grid">Filterliste</a></li>
+                         <li><a href="#kontoauszuege-art" data-icon="grid">Kontoausz&uuml;ge</a></li>
 					</ul>
 				</div>
 			</div>
@@ -358,6 +390,7 @@
         </tr>
         <% }); %>
     </script>
+    	 
     
 </body>
 </html>

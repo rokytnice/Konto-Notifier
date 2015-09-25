@@ -29,106 +29,124 @@ public class FilterMessageCallableTask implements Callable<KontoauszugDTO> {
 	@Inject
 	private CdiDao dao;
 
-	public FilterMessageCallableTask(List<FilterDTO> filters, UserDTO user, KontoDTO konto) {
+	public FilterMessageCallableTask(List<FilterDTO> filters, UserDTO user,
+			KontoDTO konto) {
 		this.filters = filters;
 		this.user = user;
 		this.konto = konto;
 	}
- 
 
 	@Override
 	public KontoauszugDTO call() {
 		KontoauszugDTO result = null;
-		
+
 		try {
 			// logger.info("Sleeping...");
 			// Thread.sleep(5000);
 			// logger.info("Finished	sleeping!");
-			
-			MyCallback myCallback = new MyCallback( konto, user);
-			
-			KontoAuszugThreaded kontoAuzugThread = new KontoAuszugThreaded(myCallback);
+
+			MyCallback myCallback = new MyCallback(konto, user);
+
+			KontoAuszugThreaded kontoAuzugThread = new KontoAuszugThreaded(
+					myCallback);
 			GVRKUms umsaetze = kontoAuzugThread.getAuszug();
 			List dpd = umsaetze.getDataPerDay();
 			StringBuffer finalMessage = new StringBuffer();
 			Iterator<FilterDTO> iter2 = filters.iterator();
-			
-			while(iter2.hasNext()){ //for all filter of all kontos of all user, compare all kontoauszüge with all filters
+
+			while (iter2.hasNext()) { // for all filter of all kontos of all
+										// user, compare all kontoauszüge with
+										// all filters
 				FilterDTO filter = iter2.next();
-				System.out.println(" +++++++++++++++++++  callable task user " + user.getEmail()   + " -filter: " +filter.getId() + "  konto : "  + konto.getKtonr()  );
-				
+				System.out.println(" +++++++++++++++++++  callable task user "
+						+ user.getEmail() + " -filter: " + filter.getId()
+						+ "  konto: " + konto.getKtonr());
+
 				Iterator<GVRKUms.BTag> iter = dpd.iterator();
-				
+
 				StringBuffer messageForFilter = new StringBuffer();
 				boolean messageFilterHeadAdded = false;
-				
-				while(iter.hasNext()){   //every Umsatz will checked against 
+
+				while (iter.hasNext()) { // every Umsatz will checked against
 					GVRKUms.BTag d = iter.next();
 					String umsatzBTag = d.toString();
 					Iterator<GVRKUms.UmsLine> iterLines = d.lines.iterator();
-					while(iterLines.hasNext()){
+					while (iterLines.hasNext()) {
 						GVRKUms.UmsLine line = iterLines.next();
 						String usage = line.usage.toString().toLowerCase();
 						StringBuffer message = new StringBuffer();
-	
-						if( filter.getSearch() != null ){
-							if( 0 <=  usage.indexOf(filter.getSearch().toLowerCase()) ){ //-1 not found
-								//TODO found message
-								message.append(line+"\n\n");
+
+						if (filter.getSearch() != null) {
+							if (0 <= usage.indexOf(filter.getSearch()
+									.toLowerCase())) { // -1 not found
+								// TODO found message
+								message.append(line + "\n\n");
 							}
 						}
-						if( filter.getMinValue() != null ){
-							if( filter.getMinValue() > line.value.getLongValue() ){ //-1 not found
-								//TODO found message
-								message.append(line+"\n\n");
+						if (filter.getMinValue() != null) {
+							if (filter.getMinValue() > line.value
+									.getLongValue()) { // -1 not found
+								// TODO found message
+								message.append(line + "\n\n");
 							}
 						}
-						if( filter.getMaxValue()  != null  ){
-							if(  filter.getMaxValue() < line.value.getLongValue() ){ //-1 not found
-								//TODO found message
-								message.append(line+"\n\n");
+						if (filter.getMaxValue() != null) {
+							if (filter.getMaxValue() < line.value
+									.getLongValue()) { // -1 not found
+								// TODO found message
+								message.append(line + "\n\n");
 							}
 						}
 
-						if( message.length()>0 ){
-							if(!messageFilterHeadAdded){
-								String filterSubject = " \n\n Suchtext: " + filter.getSearch() + "\n Minimaler Betrag  " + filter.getMinValue() +"\n Maximaler Betrag:  " +  filter.getMaxValue() + 
-								"\n\n  ";
-								messageForFilter.append(filterSubject.replace("null", ""));
-								
-								messageFilterHeadAdded=true;
+						if (message.length() > 0) {
+							if (!messageFilterHeadAdded) {
+								String filterSubject = " \n\n Suchtext: "
+										+ filter.getSearch()
+										+ "\n Minimaler Betrag:  "
+										+ filter.getMinValue()
+										+ "\n Maximaler Betrag:  "
+										+ filter.getMaxValue() + "\n\n  ";
+								messageForFilter.append(filterSubject.replace(
+										"null", ""));
+
+								messageFilterHeadAdded = true;
 							}
-							messageForFilter.append( message);
+							messageForFilter.append(message);
 						}
 					}
 				}
-				if(messageForFilter.length()>0){
+				if (messageForFilter.length() > 0) {
 					finalMessage.append(messageForFilter);
 				}
 			}
-			
-			if(finalMessage.length() > 0){
-				//refactor to utility
+
+			if (finalMessage.length() > 0) {
+				// refactor to utility
 				Calendar calStart = new GregorianCalendar();
-		        Calendar calEnd = new GregorianCalendar();
-		        calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
-				
-		        String subject = "Kontoagenten Benachrichtigung für den Zeitraum von " + calStart.getTime() + " bis " + calEnd.getTime();
-//				EMailer.mail(finalMessage.toString(), user, subject);//send mail
-				result = new KontoauszugDTO(finalMessage.toString(), user, subject);
+				Calendar calEnd = new GregorianCalendar();
+				calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
+
+				String subject = "Zeitraum von "
+						+ calStart.getTime() + " bis " + calEnd.getTime();
+				// EMailer.mail(finalMessage.toString(), user, subject);//send
+				// mail
+				String htmlizedMessage = finalMessage.toString().replaceAll("\n", "<br>");
+				result = new KontoauszugDTO(htmlizedMessage, user,
+						subject);
 			}
-			
-			HBCIUtils.doneThread();//clean up data structure - need to be done for new baking connection
+
+			HBCIUtils.doneThread();// clean up data structure - need to be done
+									// for new baking connection
 			// logger.info("process task for Not id " + not.getId());
 			// TODO hbci execute
 			// TODO JMS , email
-		
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			HBCIUtils.doneThread();
 		}
-		
-		return result;  
+
+		return result;
 	}
 }
