@@ -30,6 +30,7 @@ public class RestApplication extends Application {
 		classes.add(LoginServiceGoogle.class);
 		classes.add(LoginService.class);
 		classes.add(KontoauzugService.class);
+		classes.add(OverplusService.class);
 		
 	}
 

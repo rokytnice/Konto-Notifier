@@ -23,7 +23,7 @@ public class KontoAuszugThreaded extends GVBase
     	super();
 	}
     
-    public GVRKUms getAuszug(){
+    public GVRKUms getAuszug(Calendar calStart, Calendar calEnd){
         // eigenes konto
         Konto myAccountGiro = passport.getAccounts()[2];
         HBCIJob job=handler.newJob("KUmsAll");
@@ -31,10 +31,7 @@ public class KontoAuszugThreaded extends GVBase
         job.setParam("my.blz", mCallback.getBlz());
         job.setParam("my.number", mCallback.getKontoNr() );
         job.setParam("my.subnumber", mCallback.getKontoSubNr());
-        Calendar calStart = new GregorianCalendar();
-        Calendar calEnd = new GregorianCalendar();
-        calStart.add(Calendar.DAY_OF_MONTH, DAY_OFFSET);
-//        calEnd.add(Calendar.DAY_OF_MONTH, DAY_OFFSET);
+       
         
         job.setParam("startdate", calStart.getTime() );
         job.setParam("enddate",  calEnd.getTime());

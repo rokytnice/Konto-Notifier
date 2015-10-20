@@ -1,5 +1,7 @@
 package org.rochlitz.kontoNotifier.rest;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,14 +62,18 @@ public class KontoService {
 //			kontenOfUser.add(konto);
 			kDAO.persist(konto);
 			
+			 Calendar calStart = new GregorianCalendar();
+		        Calendar calEnd = new GregorianCalendar();
+		        calStart.add(Calendar.DAY_OF_MONTH, KontoAuszugThreaded.DAY_OFFSET);
+//		        calEnd.add(Calendar.DAY_OF_MONTH, DAY_OFFSET);
+			
 			MyCallback mc = new MyCallback(konto,user);
 			KontoAuszugThreaded t = new KontoAuszugThreaded(mc);
-			t.getAuszug();// TODO nach erfolgreichem anlegen passport speichern
+			t.getAuszug(calStart, calEnd);// TODO nach erfolgreichem anlegen passport speichern
 							// konto in db
 
 			// Create an "ok" response
 			builder = Response.ok().entity(konto);
-			result = builder.build();
 		} catch (ConstraintViolationException ce) {
 			// Handle bean validation issues
 			// builder = createViolationResponse(ce.getConstraintViolations());
@@ -97,7 +103,7 @@ public class KontoService {
 		}
 		HBCIUtils.doneThread();// clean up data structure - need to be done for
 								// new baking connection
-		return result;
+		return builder.build();
 	}
 
 	@GET

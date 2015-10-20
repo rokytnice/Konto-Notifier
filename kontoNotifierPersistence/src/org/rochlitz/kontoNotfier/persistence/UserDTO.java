@@ -39,7 +39,7 @@ public class UserDTO  implements IDTO {
 	 * e.g. if user email is not approved 
 	 */
 	@Column(name = "ACTIVE")
-	private boolean active;
+	private boolean active = true; //TODO
 	
 	
 //	@OneToMany(mappedBy="user",fetch = FetchType.LAZY)

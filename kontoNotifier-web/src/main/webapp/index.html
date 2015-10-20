@@ -23,9 +23,9 @@
 <!--<script type="text/javascript" src="js/libs/jquery-2.0.3.min.js"></script>-->
 
 <!-- For minification, comment out this file -->
-<script type="text/javascript" src="js/libs/jquery.mobile-1.4.5.js"></script>
+<!-- <script type="text/javascript" src="js/libs/jquery.mobile-1.4.5.js"></script> -->
 <!-- For minification, uncomment out this file -->
-<!--<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.min.js"></script>-->
+<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.min.js"></script>
 
 <!-- For minification, comment out this file -->
 <script type="text/javascript" src="js/libs/lodash-2.4.1.js"></script>
@@ -37,8 +37,11 @@
 <!-- For minification, uncomment out this file -->
 <!-- <script type="text/javascript" src="js/app.min.js"></script> -->
 
+<script type="text/javascript" src="js/fusioncharts.js"></script>
+<script type="text/javascript"
+	src="js/themes/fusioncharts.theme.fint.js"></script>
 
- <script type="text/javascript">
+<script type="text/javascript">
  $( document ).ready( function() {
      //setup the app after all scripts have loaded
      
@@ -105,6 +108,10 @@
     	 getKontoAusz();
      });
 
+     $("#refreshButton-aomat").click(function(event) {
+    	 loadGauge();
+     });
+
 
      //form submit listener
      $('#not-reg').submit(function(event) {
@@ -134,40 +141,51 @@
          getKontoAusz();
      });
 
+     $("#aomat-art").on("pagebeforeshow", function() {
+         loadGauge();
+     });
+
+ 	$("aomat-kontoSelection" ).change(function() {
+ 		loadGauge();
+		});
+	
      
  });
 
              
 </script>
 </head>
-	<body>
+<body>
 
 
 	<div id="container">
-	
+
 		<section>
-			<article id="login-article" data-role="page" data-title="Kontoagent Home">
+			<article id="login-article" data-role="page"
+				data-title="Kontoagent Home">
 				<!-- Header -->
 				<div data-role="header" class="header">
-						<h3>Kontoagenten  <p id="username1"></p></h3>
+					<h3>
+						Kontoassistent
+						<p id="username1"></p>
+					</h3>
 				</div>
 				<div class="ui-content" role="main">
 					<div class="wrap">
 						<form name="login-form" id="login-form" data-ajax="false">
-						<p id="introtext"><p>
-						<p></p>
-						<br>
-						
-						<label for="email">E-Mail Addresse</label>
-						<input type="text" name="email" id="email" value="">
-						<label for="password">Passwort</label>
-						<input type="password" name="password" id="password" value="">
-						<input type="submit" value="Login"></input> <br>
-						<div id="login-formMsgs"></div>
-						<a href="#registration-article">Registrierung</a>
-						
-<!-- 						<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
-<!-- 						<a href="#" onclick="signOut();">Sign out</a> -->
+							<p id="introtext">
+							<p>
+							<p></p>
+							<br> <label for="email">E-Mail Addresse</label> <input
+								type="text" name="email" id="email" value=""> <label
+								for="password">Passwort</label> <input type="password"
+								name="password" id="password" value=""> <input
+								type="submit" value="Login"></input> <br>
+							<div id="login-formMsgs"></div>
+							<a href="#registration-article">Registrierung</a>
+
+							<!-- 						<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div> -->
+							<!-- 						<a href="#" onclick="signOut();">Sign out</a> -->
 						</form>
 					</div>
 				</div>
@@ -175,39 +193,48 @@
 
 
 
-			<article id="registration-article" data-role="page" data-title="Kontoagent Home">
+			<article id="registration-article" data-role="page"
+				data-title="Kontoagent Home">
 				<!-- Header -->
 				<div data-role="header" class="header">
-						<h3>Kontoagenten  <p id="username1"></p></h3>
+					<h3>
+						Kontoassistent
+						<p id="username1"></p>
+					</h3>
 				</div>
 				<div class="ui-content" role="main">
 					<div class="wrap">
-					<form name="registration-form" id="registration-form" data-ajax="false">
-						<p id="introtext"><p>
-						<p></p>
-						<br>
-				        <label for="email">E-Mail Addresse</label>
-				        <input type="text" name="email" id="email" value="">
-				        <label for="password">Passwort</label>
-				        <input type="password" name="password" id="reg-password" value="">
-				        <label for="txt-password-confirm">Confirm Password</label>
-				        <input type="password" name="password-confirm" id="reg-password-confirm" value=""><br>
-				        <input type="submit" value="Registrieren"></input> <br>
-				       	<div id="registration-formMsgs"></div>
-						<a href="#login-article">Login</a>
-				        
-				        </form>
+						<form name="registration-form" id="registration-form"
+							data-ajax="false">
+							<p id="introtext">
+							<p>
+							<p></p>
+							<br> <label for="email">E-Mail Addresse</label> <input
+								type="text" name="email" id="email" value=""> <label
+								for="password">Passwort</label> <input type="password"
+								name="password" id="reg-password" value=""> <label
+								for="txt-password-confirm">Confirm Password</label> <input
+								type="password" name="password-confirm"
+								id="reg-password-confirm" value=""><br> <input
+								type="submit" value="Registrieren"></input> <br>
+							<div id="registration-formMsgs"></div>
+							<a href="#login-article">Login</a>
+
+						</form>
 					</div>
 				</div>
 			</article>
 
 
 
-		<article id="kontoanlegen-art" data-role="page"
+			<article id="kontoanlegen-art" data-role="page"
 				data-title="Notifier hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Kontoverbindung hinzufügen -  <p id="username2">nicht angemeldet</p></h3>
+					<h3>
+						Kontoverbindung hinzufügen -
+						<p id="username2">nicht angemeldet</p>
+					</h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -216,8 +243,7 @@
 						<form name="konto-reg" id="konto-reg" data-ajax="false">
 
 							<h3>Zugangsdaten Online Banking:</h3>
-							<br> 
-							<label>Kontonr.</label> <input name="ktonr" value="" 
+							<br> <label>Kontonr.</label> <input name="ktonr" value=""
 								type="text"> <label>Bankleitzahl</label> <input
 								name="blz" value="" type="text"> <label>Zugangsnr.</label>
 							<input name="account" value="" type="text"> <label>Passwort</label>
@@ -229,12 +255,15 @@
 					</div>
 				</div>
 			</article>
-		
+
 			<article id="not-art" data-role="page"
 				data-title="Kontoagent hinzufügen">
 				<!-- Header -->
 				<div data-role="header" class="header">
-					<h3>Kontoagenten anlegen -  <p id="username3">nicht angemeldet</p></h3>
+					<h3>
+						Filter anlegen -
+						<p id="username3">nicht angemeldet</p>
+					</h3>
 				</div>
 				<!-- /Header -->
 				<div class="ui-content" role="main">
@@ -242,12 +271,10 @@
 						<form name="not-reg" id="not-reg" data-ajax="false">
 
 							<h3></h3>
-							<br> <label>Konto</label> 
-							<select id="kontoSelection"
+							<br> <label>Konto</label> <select id="kontoSelection"
 								name="kontoSelection" value="" type="text">
 								<option id="null">Konto auswählen ...</option>
-							</select> 
-							<label>Suche</label> <input name="search" value="" type="text">
+							</select> <label>Suche</label> <input name="search" value="" type="text">
 							<label>Minimum Euro</label> <input name="minValue" value=""
 								type="text"> <label>Maximum Euro</label> <input
 								name="maxValue" value="" type="text"> <br> <input
@@ -260,29 +287,36 @@
 			</article>
 
 
-			<article id="notifiers-art" data-role="page" data-title="Liste von Agenten">
-                <!-- Header -->
-                <div data-role="header" class="header" data-position="fixed">
-                    <h3>Alle Agenten -  <p id="username4">nicht angemeldet</p></h3>
-                </div>
-                <!-- /Header -->
+			<article id="notifiers-art" data-role="page"
+				data-title="Liste von assistenten">
+				<!-- Header -->
+				<div data-role="header" class="header" data-position="fixed">
+					<h3>
+						Alle Filter -
+						<p id="username4">nicht angemeldet</p>
+					</h3>
+				</div>
+				<!-- /Header -->
 
-                <div class="ui-content" role="main">
-                    <div class="wrap">
-                        <button id="refreshButton-notifiers" data-role="button" data-inline="true" data-icon="refresh">aktualisieren</button>
-                        <table data-role="table" id="notifiers-table" data-mode="columntoggle" class="ui-responsive table-stroke ui-table ui-table-columntoggle">
-                            
-                            <thead>
-                                <tr>
-                                    <th data-priority="2">Konto</th>
-                                    <th data-priority="2">Suchtext</th>
-                                    <th data-priority="2">Minimum &euro; </th>
-                                    <th data-priority="2">Maximum &euro;</th>
-                                     <th data-priority="2"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="notifiers">
-                            <!-- This is where the list of members gets populated by the templates. This row is only
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<button id="refreshButton-notifiers" data-role="button"
+							data-inline="true" data-icon="refresh">aktualisieren</button>
+						<table data-role="table" id="notifiers-table"
+							data-mode="columntoggle"
+							class="ui-responsive table-stroke ui-table ui-table-columntoggle">
+
+							<thead>
+								<tr>
+									<th  >Konto</th>
+									<th data-priority="2">Suchtext</th>
+									<th data-priority="2">Minimum &euro;</th>
+									<th data-priority="2">Maximum &euro;</th>
+									<th  ></th>
+								</tr>
+							</thead>
+							<tbody id="notifiers">
+								<!-- This is where the list of members gets populated by the templates. This row is only
                                 here as an example of the code that will be inserted.
                             <tr>
                                 <th>0</td>
@@ -292,74 +326,111 @@
                                 <td><a href="rest/members/0" rel="external" target="_blank" class="resturl ui-link">JSON</a></td>
                             </tr>
                             -->
-                            </tbody>
-                        </table>
-                        <div class="member-foot">
-                        </div>
-                    </div>
-                </div>
-            </article>
+							</tbody>
+						</table>
+						<div class="member-foot"></div>
+					</div>
+				</div>
+			</article>
 
 
 			<article id="kontos-art" data-role="page" data-title="Liste Konten">
-                <!-- Header -->
-                <div data-role="header" class="header" data-position="fixed">
-                    <h3>Alle Kontoverbindungen-  <p id="username5">nicht angemeldet</p></h3>
-                </div>
-                <!-- /Header -->
+				<!-- Header -->
+				<div data-role="header" class="header" data-position="fixed">
+					<h3>
+						Alle Kontoverbindungen-
+						<p id="username5">nicht angemeldet</p>
+					</h3>
+				</div>
+				<!-- /Header -->
 
-                <div class="ui-content" role="main">
-                    <div class="wrap">
-                        <button id="refreshButton-kontos" data-role="button" data-inline="true" data-icon="refresh">aktualisieren</button>
-                        <table data-role="table" id="kontos-table" data-mode="columntoggle" class="ui-responsive table-stroke ui-table ui-table-columntoggle">
-                            <thead>
-                                <tr>
-                                    <th data-priority="2">Kontonr.</th>
-                                    <th data-priority="2">BLZ</th>
-                                    <th data-priority="2">Zugangsnr.</th>
-                                    <th data-priority="2"></th>
-                                </tr>
-                            </thead>
-                            <tbody id="kontos">
-                            
-                            </tbody>
-                        </table>
-                        <div class="kontos-foot">
-                        <div id="kontos-formMsgs"></div>
-                        </div>
-                    </div>
-                </div>
-            </article>	
-            
-            <article id="kontoauszuege-art" data-role="page" data-title="Liste Kontoauszuege">
-                <!-- Header -->
-                <div data-role="header" class="header" data-position="fixed">
-                    <h3>letzte gefilterte Kontoausz&uuml;ge <p id="username6">nicht angemeldet</p></h3>
-                </div>
-                <!-- /Header -->
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<button id="refreshButton-kontos" data-role="button"
+							data-inline="true" data-icon="refresh">aktualisieren</button>
+						<table data-role="table" id="kontos-table"
+							data-mode="columntoggle"
+							class="ui-responsive table-stroke ui-table ui-table-columntoggle">
+							<thead>
+								<tr>
+									<th>Kontonr.</th>
+									<th data-priority="2">BLZ</th>
+									<th data-priority="2">Zugangsnr.</th>
+									<th ></th>
+								</tr>
+							</thead>
+							<tbody id="kontos">
 
-                <div class="ui-content" role="main">
-                    <div class="wrap">
-                        <button id="refreshButton-kontoauszug" data-role="button" data-inline="true" data-icon="refresh">aktualisieren</button>
-                        <div id="kontoauszuege"></div>
-                    </div>
-                      <div id="kontoausz-Msgs"></div>
-                </div>
-            </article>	
+							</tbody>
+						</table>
+						<div class="kontos-foot">
+							<div id="kontos-formMsgs"></div>
+						</div>
+					</div>
+				</div>
+			</article>
+
+			<article id="kontoauszuege-art" data-role="page"
+				data-title="Liste Kontoauszuege">
+				<!-- Header -->
+				<div data-role="header" class="header" data-position="fixed">
+					<h3>
+						letzte gefilterte Kontoausz&uuml;ge
+						<p id="username6">nicht angemeldet</p>
+					</h3>
+				</div>
+				<!-- /Header -->
+
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<button id="refreshButton-kontoauszug" data-role="button"
+							data-inline="true" data-icon="refresh">aktualisieren</button>
+						<div id="kontoauszuege"></div>
+					</div>
+					<div id="kontoausz-Msgs"></div>
+				</div>
+			</article>
+
+			<article id="aomat-art" data-role="page" data-title="Aomat">
+				<!-- Header -->
+				<div data-role="header" class="header" data-position="fixed">
+					<h3>
+						<p id="username6">nicht angemeldet</p>
+					</h3>
+				</div>
+				<!-- /Header -->
+
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<form name="aomat-form" id="aomat-form" data-ajax="false">
+							<button id="refreshButton-aomat" data-role="button"
+								data-inline="true" data-icon="refresh">aktualisieren</button>
+							<!-- select id="aomat-kontoSelection" name="aomat-kontoSelection" value=""
+								type="text">
+								<option id="null">Konto auswählen ...</option>
+							</select-->
+							<div id="chart-container">An guage will load here!</div>
+						</form>
+					</div>
+					<div id="aomat-Msgs"></div>
+				</div>
+			</article>
 
 
 			<!-- Footer -->
 			<div data-role="footer" data-tap-toggle="false" data-position="fixed"
-				data-theme="a" >
+				data-theme="a">
 				<div data-role="navbar">
 					<ul>
-					 								
+
 						<!--  >li><a href="#login-article" data-icon="home" class="ui-btn-active">Hauptmenü</a></li-->
-                        <li><a href="#kontoanlegen-art" data-icon="plus">Konto anlegen</a></li>
-                        <li><a href="#kontos-art" data-icon="grid">Kontenliste</a></li>
-                        <li><a href="#not-art" data-icon="plus">Filter anlegen</a></li>
-                         <li><a href="#notifiers-art" data-icon="grid">Filterliste</a></li>
-                         <li><a href="#kontoauszuege-art" data-icon="grid">Kontoausz&uuml;ge</a></li>
+						<li><a href="#kontoanlegen-art" data-icon="plus">Konto
+								anlegen</a></li>
+						<li><a href="#kontos-art" data-icon="grid">Kontenliste</a></li>
+						<li><a href="#not-art" data-icon="plus">Filter anlegen</a></li>
+						<li><a href="#notifiers-art" data-icon="grid">Filterliste</a></li>
+						<li><a href="#kontoauszuege-art" data-icon="grid">Kontoausz&uuml;ge</a></li>
+						<li><a href="#aomat-art" data-icon="grid">Aomat</a></li>
 					</ul>
 				</div>
 			</div>
@@ -380,7 +451,7 @@
         </tr>
         <% }); %>
     </script>
-    	<script type="text/template" id="kontos-tmpl">
+	<script type="text/template" id="kontos-tmpl">
         <% _.each(data, function(row) { %>
         <tr>
             <th><%=row.ktonr%></td>
@@ -390,7 +461,7 @@
         </tr>
         <% }); %>
     </script>
-    	 
-    
+
+
 </body>
 </html>

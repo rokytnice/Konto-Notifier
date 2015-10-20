@@ -10,6 +10,9 @@
         <dependent-module archiveName="hbci4java.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/hbci4java/hbci4java">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="kontoNotifierHBCI.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/kontoNotifierHBCI/kontoNotifierHBCI">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="kontoNotifier-web"/>
         <property name="java-output-path" value="/kontoNotifier-web/target/classes"/>
     </wb-module>

@@ -49,7 +49,10 @@ public class FilterMessageCallableTask implements Callable<KontoauszugDTO> {
 
 			KontoAuszugThreaded kontoAuzugThread = new KontoAuszugThreaded(
 					myCallback);
-			GVRKUms umsaetze = kontoAuzugThread.getAuszug();
+			 Calendar calStart = new GregorianCalendar();
+		        Calendar calEnd = new GregorianCalendar();
+		        calStart.add(Calendar.DAY_OF_MONTH, KontoAuszugThreaded.DAY_OFFSET);
+			GVRKUms umsaetze = kontoAuzugThread.getAuszug(calStart, calEnd);
 			List dpd = umsaetze.getDataPerDay();
 			StringBuffer finalMessage = new StringBuffer();
 			Iterator<FilterDTO> iter2 = filters.iterator();
@@ -100,14 +103,13 @@ public class FilterMessageCallableTask implements Callable<KontoauszugDTO> {
 
 						if (message.length() > 0) {
 							if (!messageFilterHeadAdded) {
-								String filterSubject = " \n\n Suchtext: "
+								String filterSubject = " \n\n <b>Suchtext: "
 										+ filter.getSearch()
 										+ "\n Minimaler Betrag:  "
 										+ filter.getMinValue()
 										+ "\n Maximaler Betrag:  "
-										+ filter.getMaxValue() + "\n\n  ";
-								messageForFilter.append(filterSubject.replace(
-										"null", ""));
+										+ filter.getMaxValue() + "\n\n  </b>";
+								messageForFilter.append(filterSubject);
 
 								messageFilterHeadAdded = true;
 							}
@@ -116,21 +118,18 @@ public class FilterMessageCallableTask implements Callable<KontoauszugDTO> {
 					}
 				}
 				if (messageForFilter.length() > 0) {
-					finalMessage.append(messageForFilter);
+					finalMessage.append("<hr>"+messageForFilter);
 				}
 			}
 
 			if (finalMessage.length() > 0) {
 				// refactor to utility
-				Calendar calStart = new GregorianCalendar();
-				Calendar calEnd = new GregorianCalendar();
-				calStart.add(Calendar.DAY_OF_MONTH, GVBase.DAY_OFFSET);
 
 				String subject = "Zeitraum von "
-						+ calStart.getTime() + " bis " + calEnd.getTime();
+						+ calStart.getTime() + " bis " + calEnd.getTime() + " ";
 				// EMailer.mail(finalMessage.toString(), user, subject);//send
 				// mail
-				String htmlizedMessage = finalMessage.toString().replaceAll("\n", "<br>");
+				String htmlizedMessage = finalMessage.toString().replaceAll("\n", "<br>").replace("null", "");
 				result = new KontoauszugDTO(htmlizedMessage, user,
 						subject);
 			}

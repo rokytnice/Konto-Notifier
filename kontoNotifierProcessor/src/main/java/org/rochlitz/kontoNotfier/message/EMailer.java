@@ -37,6 +37,7 @@ public class EMailer {
 		try {
  
 			Message message = new MimeMessage(session);
+			message.setContent(message, "text/html; charset=utf-8");
 			message.setFrom(new InternetAddress("from@kontoagent.de"));
 			message.setRecipients(Message.RecipientType.TO,
 					InternetAddress.parse(email));
@@ -44,7 +45,8 @@ public class EMailer {
 	        
 			message.setSubject(subject);
 			String messageText = usage;
-			message.setText(messageText.replaceAll("null", ""));
+			//TODO replacement in utility 
+			message.setText(messageText.replaceAll("null", "").replace("<br>", "\n").replaceAll("<hr>", "-----------------------------------------------"));
 			
 			Transport.send(message);
  

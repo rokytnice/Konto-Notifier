@@ -191,3 +191,15 @@ div[data-role="navbar"] a.ui-link.ui-btn-active:after {
         padding: 3em;
     }
 }
+
+
+table {
+    white-space: normal;
+    line-height: normal;
+    font-weight: normal;
+    font-size: 1em;
+    font-variant: normal;
+    font-style: normal;
+    color: -webkit-text;
+    text-align: start;
+}

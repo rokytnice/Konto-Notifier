@@ -1,5 +1,7 @@
 require("https://apis.google.com/js/platform.js");
 require("js/libs/sha512.js");
+// require("js/fusioncharts.js");
+// require("js/themes/fusioncharts.theme.fint.js");
 
 var serviceRootUrl = "https://kontoagent.ddns.net/notifier/";
 
@@ -73,6 +75,7 @@ function buildkontosRows(data) {
 function getKontos() {
 
 	$select = $('#kontoSelection');
+	$selectAomat = $('#aomat-kontoSelection');
 	$.ajax({
 		url : serviceRootUrl + "rest/konto",
 		cache : false,
@@ -85,6 +88,7 @@ function getKontos() {
 				console.log(" ------------ -" + val.account + "  --------"
 						+ val.id);
 				$select.append(new Option(val.account, val.id));
+				$selectAomat.append(new Option(val.account, val.id));
 			})
 			return data;
 		},
@@ -149,7 +153,8 @@ function saveKonto(data) {
 	// Display the loader widget
 	$.mobile.loading("show");
 
-	$.ajax({
+	$
+			.ajax({
 				url : serviceRootUrl + "rest/konto",
 				contentType : "application/json",
 				dataType : "json",
@@ -200,7 +205,8 @@ function saveFilter(data) {
 	// Display the loader widget
 	$.mobile.loading("show");
 
-	$.ajax({
+	$
+			.ajax({
 				url : serviceRootUrl + "rest/notifier",
 				contentType : "application/json",
 				dataType : "json",
@@ -317,7 +323,7 @@ function onSignIn(googleUser) {
 	// Useful data for your client-side scripts:
 	profile = googleUser.getBasicProfile();
 	console.log("ID: " + profile.getId()); // Don't send this directly to your
-											// server!
+	// server!
 	console.log("Name: " + profile.getName());
 	console.log("Image URL: " + profile.getImageUrl());
 	console.log("Email: " + profile.getEmail());
@@ -341,7 +347,8 @@ function onSignIn(googleUser) {
 
 function deleteKonto(id) {
 	console.log("del konto id: " + id);
-	$.ajax({
+	$
+			.ajax({
 				url : serviceRootUrl + "rest/konto/deletekonto/" + id,
 				contentType : "application/json",
 				dataType : "json",
@@ -379,7 +386,8 @@ function deleteKonto(id) {
 
 function deleteFilter(id) {
 	console.log("del filter id: " + id);
-	$.ajax({
+	$
+			.ajax({
 				url : serviceRootUrl + "rest/notifier/deletefilter/" + id,
 				contentType : "application/json",
 				dataType : "json",
@@ -447,7 +455,6 @@ function registerUser() {
 
 	$.mobile.loading("hide");
 }
- 
 
 function displayEmail(data) {
 	$("#username1").empty().append(data.email);
@@ -483,6 +490,7 @@ function login() {
 			// $("/notifier/index.html#login-article").click();
 			displayEmail(data);
 			window.document.location.href = "/notifier/#kontos-art";
+			getKontos();
 		},
 		error : function(error) {
 			$('#login-formMsgs').append(
@@ -493,18 +501,20 @@ function login() {
 		}
 	});
 	$.mobile.loading("hide");
+	
 }
 
-
 function getKontoAusz(id) {
-	$.ajax({
+	$
+			.ajax({
 				url : serviceRootUrl + "rest/kontoauzug", // + id,
 				contentType : "application/json",
 				dataType : "json",
 				type : "GET",
 				data : id,
 				success : function(data) {
-					$("#kontoauszuege").empty().append(data.subject +  "  <br><br><br>  "  + data.message);
+					$("#kontoauszuege").empty().append(
+							data.subject + "  <br><br><br>  " + data.message);
 
 				},
 				error : function(error) {
@@ -531,10 +541,78 @@ function getKontoAusz(id) {
 
 				}
 			});
+
 }
 
-//function buildKontoAuszugRows(data) {
-//	return _.template($("#kontoauszug-tmpl").html(), {
-//		"data" : data
-//	});
-//}
+function loadGauge() {
+
+	// Display the loader widget
+	$.mobile.loading("show");
+	$.ajax({
+		url : serviceRootUrl + "rest/overplus",
+		contentType : "application/json",
+		dataType : "json",
+		type : "GET",
+		success : function(data) {
+			console.log("data");
+			drowGouge(data)
+		},
+		error : function(error) {
+			$('#registration-formMsgs').append(
+					'<span class="invalid">' + error.responseText + '</span>');
+		},
+	});
+
+	$.mobile.loading("hide");
+}
+
+function drowGouge(overplus) {
+	
+
+		var redMin = 0;
+		var redMax = overplus.moeglicheAusgabenProTag * 0.3;
+		var yellowMin = overplus.moeglicheAusgabenProTag * 0.3;
+		var yellowMax = overplus.moeglicheAusgabenProTag * 0.6;
+		var greenMin = overplus.moeglicheAusgabenProTag * 0.6;
+		var greenMax = overplus.moeglicheAusgabenProTag;
+
+		var csatGauge = new FusionCharts({
+			"type" : "angulargauge",
+			"renderAt" : "chart-container",
+			"width" : "300",
+			"height" : "200",
+			"dataFormat" : "json",
+			"dataSource" : {
+				"chart" : {
+					"caption" : "Ausgabomat",
+					"subcaption" : " ",
+					"lowerLimit" : "0",
+					"upperLimit" : "overplus.einnahmen",
+					"theme" : "fint"
+				},
+				"colorRange" : {
+					"color" : [ {
+						"minValue" : redMin,
+						"maxValue" : redMax,
+						"code" : "#e44a00"
+					}, {
+						"minValue" : yellowMin,
+						"maxValue" : yellowMax,
+						"code" : "#f8bd19"
+					}, {
+						"minValue" : greenMin,
+						"maxValue" : greenMax,
+						"code" : "#6baa01"
+					} ]
+				},
+				"dials" : {
+					"dial" : [ {
+						"value" : overplus.moeglicheAusgabenProTag + overplus.bisherigeAusgabenProTag
+					} ]
+				}
+			}
+		});
+
+		csatGauge.render();
+
+}

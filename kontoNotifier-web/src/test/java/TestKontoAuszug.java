@@ -1,3 +1,6 @@
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import org.junit.Test;
 import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
 import org.rochlitz.hbci.tests.web.MyCallback;
@@ -14,7 +17,11 @@ public class TestKontoAuszug {
 		user.setEmail("andre.rochlitz@gmailcom");
 		MyCallback mc = new MyCallback(konto,user);
 		KontoAuszugThreaded t = new KontoAuszugThreaded(mc);
-		t.getAuszug();
+		 Calendar calStart = new GregorianCalendar();
+	        Calendar calEnd = new GregorianCalendar();
+	        calStart.add(Calendar.DAY_OF_MONTH, KontoAuszugThreaded.DAY_OFFSET);
+//	        calEnd.add(Calendar.DAY_OF_MONTH, DAY_OFFSET);
+		t.getAuszug(calStart, calEnd);
 		assert(true);
 	}
 

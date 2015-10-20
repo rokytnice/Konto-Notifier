@@ -69,7 +69,7 @@ public class NotifierProcessor {
 					KontoauszugDTO kauz = n.call();//get Kontauszug
 					if(kauz!=null){
 						dao.persist(kauz);}//save kontoauszug in db
-					//EMailer.mail(kauz.getMessage(), user, "Filter vom "+ new Date().toString());
+					EMailer.mail(kauz.getMessage(), user, kauz.getSubject());
 					}
 			}
 
