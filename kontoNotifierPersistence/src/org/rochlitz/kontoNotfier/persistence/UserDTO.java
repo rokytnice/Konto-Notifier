@@ -121,7 +121,6 @@ public class UserDTO  implements IDTO {
 		this.active = active;
 	}
 	
-	
 //	public List<KontoDTO> getKonten() {
 //		return konten;
 //	}

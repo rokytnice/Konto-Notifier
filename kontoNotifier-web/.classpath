@@ -41,5 +41,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="/home/aroc/wildfly-8.2.0.Final/modules/system/layers/base/org/jboss/resteasy/resteasy-jaxrs/main/resteasy-jaxrs-3.0.10.Final.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

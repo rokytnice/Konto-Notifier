@@ -20,6 +20,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.kapott.hbci.GV_Result.GVRKUms;
+import org.kapott.hbci.GV_Result.GVRKUms.BTag;
+import org.kapott.hbci.GV_Result.GVRKUms.UmsLine;
 import org.kapott.hbci.manager.HBCIUtils;
 import org.rochlitz.hbci.tests.web.KontoAuszugThreaded;
 import org.rochlitz.hbci.tests.web.MyCallback;
@@ -27,6 +29,8 @@ import org.rochlitz.kontoNotfier.persistence.AllDAO;
 import org.rochlitz.kontoNotfier.persistence.KontoDTO;
 import org.rochlitz.kontoNotfier.persistence.UserDTO;
 import org.rochlitz.kontoNotifier.security.Authentication;
+
+import sun.java2d.loops.ProcessPath.EndSubPathHandler;
 
 //   http://your_domain:port/display-name/url-pattern/path_from_rest_class 
 //   http://localhost:8080/kontoNotifier-web/rest/konto
@@ -66,15 +70,24 @@ public class OverplusService {
 				MyCallback myCallback = new MyCallback(konto, user);
 				KontoAuszugThreaded kontoAuzugThread = new KontoAuszugThreaded(
 						myCallback);
+				Calendar today = new GregorianCalendar();
 				Calendar calStart = new GregorianCalendar();
 				Calendar calEnd = new GregorianCalendar();
-				calStart.set(Calendar.DAY_OF_MONTH, 1);
+				
+							
+				int monthOfStartDate = (today.get(Calendar.MONTH)-1);
+				calStart.set(Calendar.MONTH, monthOfStartDate );
+				
+				System.out.println("today: " + today  );
+				System.out.println( "calStart: " + calStart  );
+				System.out.println( "calEnd: "+ calEnd  );
+				
 				GVRKUms umsaetze = kontoAuzugThread.getAuszug(calStart, calEnd);
 				Overplus overplus = getOverplusData(umsaetze);
 				lOverplus.add(overplus);
 			}
 			
-			overplusMergedAllKontos = mergeOverplus(lOverplus);
+			overplusMergedAllKontos = mergeOverplusAcounts(lOverplus);
 			
 			HBCIUtils.doneThread();// clean up data structure - need to be done
 
@@ -97,7 +110,7 @@ public class OverplusService {
 		return Response.ok(overplusMergedAllKontos).build();
 	}
 
-	private Overplus mergeOverplus(List<Overplus> lOverplus) {
+	private Overplus mergeOverplusAcounts(List<Overplus> lOverplus) {
 		Iterator<Overplus> iter = lOverplus.iterator();
 		Overplus result = new Overplus();
 		while( iter.hasNext() ){
@@ -108,19 +121,33 @@ public class OverplusService {
 	}
 
 	private Overplus getOverplusData(GVRKUms umsaetze) {
-		Calendar calendar = Calendar.getInstance();
-		int maxTageMonat = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		int vergangeneTageMonat = calendar.get(Calendar.DAY_OF_MONTH);
+		UmsLine incomeTransaction = getIncome(umsaetze);
+		List datapDay = removeAllBeforeIncome(umsaetze.getDataPerDay(),incomeTransaction);
+		
+		Calendar today = Calendar.getInstance();
+		Calendar incomeDate = Calendar.getInstance();
+		
+		incomeDate.setTime( incomeTransaction.bdate ) ;
+		
+		Calendar incomeDateNextMonth = Calendar.getInstance();
+		int incomeDateMonthNextMonth = (today.get(Calendar.MONTH)+1);
+		incomeDateNextMonth.set(Calendar.MONTH, incomeDateMonthNextMonth);
+		
+		int maxTageMonat = incomeDate.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int vergangeneTageMonat = incomeDate.get(Calendar.DAY_OF_MONTH);
 		Double einnahmen = new Double(0) ;
 		Double ausgaben = new Double(0) ;
+		
+		if( today.get(Calendar.DAY_OF_MONTH) < incomeDate.get(Calendar.DAY_OF_MONTH) ){ //income in previous month
+			vergangeneTageMonat = maxTageMonat - vergangeneTageMonat + today.get(Calendar.DAY_OF_MONTH);
+		}else{
+			vergangeneTageMonat = today.get(Calendar.DAY_OF_MONTH) - incomeDate.get(Calendar.DAY_OF_MONTH);
+		}
 
-		List dpd = umsaetze.getDataPerDay();
-
-		Iterator<GVRKUms.BTag> iter = dpd.iterator();
+		Iterator<GVRKUms.BTag> iter = datapDay.iterator();
 
 		while (iter.hasNext()) { // every Umsatz will checked against
 			GVRKUms.BTag d = iter.next();
-			String umsatzBTag = d.toString();
 			Iterator<GVRKUms.UmsLine> iterLines = d.lines.iterator();
 			while (iterLines.hasNext()) {
 				GVRKUms.UmsLine line = iterLines.next();
@@ -128,25 +155,67 @@ public class OverplusService {
 				Double dbetrag = line.value.getDoubleValue();
 				
 				if ( 0 > dbetrag) { //ausgabe
-					
 					ausgaben = ausgaben + dbetrag;
 				}
 				if (  0 < dbetrag) { //einnahme
 					einnahmen = einnahmen +  dbetrag;
 				}
+				System.out.println("  ***************************** incomeTransaction valuta: " + incomeTransaction.valuta.toString() + "   Betrag: " + incomeTransaction.value  + "  bdate: " + incomeTransaction.bdate);
 				System.out.println(" §§§§§§§§§§§§§§§§§§§§§§§§§§§§  betrag: " + dbetrag   +  " §§§§§  einnahmen: "+einnahmen   + " §§§§§  ausgaben: "+ausgaben  + "  §§§§§ maxTageMonat: "+maxTageMonat  + "  §§§§§ vergangeneTageMonat:"+vergangeneTageMonat);
-
 			}
 		}
-
-		int iEinnahmen = (int) einnahmen.doubleValue();
-		int iAusgaben = (int) ausgaben.doubleValue();
-		
-
-		Overplus result = new Overplus(maxTageMonat, einnahmen,  iAusgaben, vergangeneTageMonat );
-		
-		
+		Overplus result = new Overplus(maxTageMonat, einnahmen,  ausgaben, vergangeneTageMonat );
 		return result;
+	}
+	
+
+	private List<BTag> removeAllBeforeIncome(List<BTag> dpd, UmsLine incomeTransaction) {
+		try {
+			Iterator<GVRKUms.BTag> iter = dpd.iterator();
+			while (iter.hasNext()) { //find biggest income transaction = income
+				GVRKUms.BTag tagesUmsatz = iter.next();
+				Iterator<GVRKUms.UmsLine> iterLines = tagesUmsatz.lines.iterator();
+				while (iterLines.hasNext()) {
+					GVRKUms.UmsLine line = iterLines.next();
+					
+					if(line.bdate == null){
+						continue;
+					}
+					if(!line.bdate.after(incomeTransaction.bdate)){
+						iter.remove();
+						continue;
+					}
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return dpd;
+	}
+
+	private GVRKUms.UmsLine getIncome(GVRKUms umsaetze) {
+		List dpd = umsaetze.getDataPerDay();
+		Iterator<GVRKUms.BTag> iter = dpd.iterator();
+		Double biggestIncome = new Double(0) ;
+		GVRKUms.UmsLine biggestIncomeLine = null;
+		while (iter.hasNext()) { //find biggest income transaction = income
+			GVRKUms.BTag d = iter.next();
+			Iterator<GVRKUms.UmsLine> iterLines = d.lines.iterator();
+			while (iterLines.hasNext()) {
+				GVRKUms.UmsLine line = iterLines.next();
+				String usage = line.usage.toString().toLowerCase();
+				Double dbetrag = line.value.getDoubleValue();
+				if (biggestIncome < dbetrag) { //ausgabe
+					biggestIncome = dbetrag;
+					biggestIncomeLine = line;
+				}
+			}
+		}
+			
+		System.out.println(" §§§§§§§§§§§§§§§§§§§§§§§§§§§§  biggestIncome: " + biggestIncome   +  " §§§§§  incomeBTag: "+biggestIncomeLine );
+	
+		return biggestIncomeLine;
 	}
 
 }
